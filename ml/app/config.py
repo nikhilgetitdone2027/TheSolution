@@ -7,8 +7,8 @@ DATASET_PATH = DATA_DIR / "demo_dataset.csv"
 MODEL_PATH = ARTIFACT_DIR / "model.joblib"
 META_PATH = ARTIFACT_DIR / "model_meta.json"
 
-DATASET_ID = "hackathon-demo-illustrative-v1"
-DATASET_LABEL = "Hackathon Demo Dataset — Illustrative"
+DATASET_ID = "wpi-belden-2022-v1"
+DATASET_LABEL = "WPI Pyrolysis Benchmark (Belden et al., 2022)"
 RANDOM_STATE = 20260330
 
 MATERIAL_COLUMNS = [

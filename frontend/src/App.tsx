@@ -2,6 +2,7 @@ import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { SaathiChat } from "./components/saathi/SaathiChat";
 import { Shell } from "./components/Shell";
 import { GuidedDemoProvider } from "./workflow/GuidedDemo";
+import { JudgeTourProvider } from "./workflow/JudgeTourController";
 import { Carbon } from "./pages/Carbon";
 import { Chemical } from "./pages/Chemical";
 import { Impact } from "./pages/Impact";
@@ -49,10 +50,12 @@ export function App() {
         path="/app/*"
         element={
           <GuidedDemoProvider>
-            <Shell>
-              <Pages />
-              <SaathiChat />
-            </Shell>
+            <JudgeTourProvider>
+              <Shell>
+                <Pages />
+                <SaathiChat />
+              </Shell>
+            </JudgeTourProvider>
           </GuidedDemoProvider>
         }
       />

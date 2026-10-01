@@ -5,6 +5,7 @@ import { useJudgeAdvance } from "../judgeFlow";
 import { useAnalysis } from "../state/AnalysisContext";
 import { formatNumber } from "../format";
 import { GuidedDemoBar } from "../workflow/GuidedDemo";
+import { JudgeTourBanner, useJudgeTour } from "../workflow/JudgeTourController";
 import { AnalysisTheater, TheaterReopen } from "./animations/AnalysisTheater";
 
 const LINKS: Array<{ to: string; label: string; end?: boolean; needs?: "sample" | "prediction" | "pathways" | "optimized" }> = [
@@ -42,6 +43,7 @@ function confidenceLabel(active: ReturnType<typeof useAnalysis>["active"]) {
 export function Shell({ children }: { children: ReactNode }) {
   const store = useAnalysis();
   const judge = useJudgeAdvance();
+  const judgeTour = useJudgeTour();
   const [open, setOpen] = useState(false);
   const quality = store.active?.validation?.quality_score;
   const location = useLocation();
@@ -93,16 +95,28 @@ export function Shell({ children }: { children: ReactNode }) {
         </div>
       </aside>
       <div className="min-w-0">
+        <JudgeTourBanner />
         <header className="border-b border-line bg-surface">
-          <div className="flex items-center justify-between gap-3 px-4 py-3 md:px-6">
+          <div className="flex flex-wrap items-center justify-between gap-3 px-4 py-3 md:px-6">
             <button className="border border-line px-3 py-1 text-sm md:hidden" type="button" onClick={() => setOpen((value) => !value)}>
               Menu
             </button>
-            <div className="grid flex-1 grid-cols-2 gap-3 md:grid-cols-4">
+            <div className="grid flex-1 grid-cols-2 gap-3 sm:grid-cols-4">
               <Status label="Current sample" value={store.active?.name ?? "None loaded"} />
               <Status label="Model status" value={store.model ? `Ready · ${store.model.selected.model}` : "Not loaded"} />
               <Status label="Data quality" value={quality === undefined ? "—" : `${formatNumber(quality, 0)}%`} />
               <Status label="AI confidence" value={confidenceLabel(store.active)} />
+            </div>
+            {/* Prominent Start Judge Tour CTA */}
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={judgeTour.startTour}
+                className="btn flex items-center gap-1.5 rounded-md bg-gradient-to-r from-emerald-600 to-teal-700 px-3.5 py-1.5 text-xs font-semibold text-white shadow-md hover:from-emerald-500 hover:to-teal-600 transition-all hover:scale-[1.02]"
+                title="Start 1-Click Autonomous Judge Presentation Tour (~90-100s)"
+              >
+                <span className="text-amber-300">⚡</span> Start Judge Tour
+              </button>
             </div>
           </div>
           {store.judgeActive ? (

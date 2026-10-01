@@ -227,15 +227,17 @@ app.post("/api/samples/:id/analyze", async (request, response) => {
       prediction: unknown;
       comparison: unknown;
       flows: unknown;
+      intelligence?: unknown;
     };
     sample.prediction = pathwayResult.prediction;
     sample.pathways = pathwayResult.comparison;
     sample.flows = pathwayResult.flows;
+    sample.intelligence = pathwayResult.intelligence;
     event(response, "stage", {
       id: "predict",
       label: "Running prediction model",
       status: "complete",
-      payload: { prediction: sample.prediction },
+      payload: { prediction: sample.prediction, intelligence: sample.intelligence },
     });
     event(response, "stage", { id: "pathways", label: "Comparing pathways", status: "complete" });
     event(response, "stage", { id: "explain", label: "Generating explanation", status: "running" });
@@ -492,6 +494,22 @@ app.get("/api/samples/:id/profile", async (request, response) => {
       return;
     }
     response.json(await ml.profile(sample.inputs, sample.category, sample.sourceLabel));
+  } catch (error) {
+    sendError(response, error);
+  }
+});
+
+app.get("/api/samples/:id/intelligence", async (request, response) => {
+  try {
+    const sample = await getSample(request.params.id);
+    if (!sample) {
+      response.status(404).json({ error: "Sample not found." });
+      return;
+    }
+    const intel = await ml.intelligence(sample.inputs, sample.category, sample.sourceLabel);
+    sample.intelligence = intel.intelligence;
+    await saveSample(sample);
+    response.json(intel);
   } catch (error) {
     sendError(response, error);
   }

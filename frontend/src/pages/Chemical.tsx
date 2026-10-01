@@ -15,6 +15,10 @@ const ELEMENT_LABELS: Record<string, string> = {
   chlorine_pct: "Chlorine",
 };
 
+import { PretreatmentAcidGasCard } from "../components/chemical/PretreatmentAcidGasCard";
+import { ThermalAutarkyDialCard } from "../components/chemical/ThermalAutarkyDialCard";
+import { PonaOilQualityCard } from "../components/chemical/PonaOilQualityCard";
+
 export function Chemical() {
   const { active, profile, loadProfile, saveInputs, model, busy } = useAnalysis();
   const [selected, setSelected] = useState("PE");
@@ -50,6 +54,8 @@ export function Chemical() {
       ]
     : [];
 
+  const scientificIntel = profile?.intelligence ?? active?.intelligence ?? active?.pathways?.intelligence;
+
   return (
     <div className="space-y-6">
       <header>
@@ -59,6 +65,15 @@ export function Chemical() {
           <SourceBadge label={active.sourceLabel} />
         </div>
       </header>
+
+      {/* Module 1: Pretreatment, HCl release & Lime Scrubber */}
+      <PretreatmentAcidGasCard contamination={scientificIntel?.contamination} />
+
+      {/* Module 2: Thermodynamics & Thermal Autarky Dial */}
+      <ThermalAutarkyDialCard thermodynamics={scientificIntel?.thermodynamics} />
+
+      {/* Module 3: Pyrolysis Oil Quality & PONA Distribution */}
+      <PonaOilQualityCard oilQuality={scientificIntel?.oil_quality} />
 
       <section className="grid gap-4 lg:grid-cols-[1.1fr_0.9fr]">
         <div className="border border-line bg-surface p-4">

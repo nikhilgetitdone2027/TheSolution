@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { AnalysisPipeline, STEP_ROUTES } from "../components/animations/AnalysisPipeline";
 import { DecisionCard } from "../components/DecisionCard";
+import { CommercialFeasibilityCard } from "../components/CommercialFeasibilityCard";
 import { useAnalysis } from "../state/AnalysisContext";
 import { useWorkflow } from "../workflow/engine";
 import { useGuidedDemo } from "../workflow/GuidedDemo";
@@ -52,6 +53,14 @@ export function Overview() {
         <AnalysisPipeline onSelect={(id) => transitionTo(navigate, STEP_ROUTES[id])} />
         <p className="mt-3 text-xs text-muted">Step states reflect the real API responses for the current sample. Nothing is marked complete before the backend returns.</p>
       </section>
+
+      {sample?.prediction?.available && (
+        <CommercialFeasibilityCard
+          oilPct={sample.prediction.output_map?.oil_pct ?? sample.prediction.outputs?.find((o) => o.key === "oil_pct")?.value ?? 68.5}
+          gasPct={sample.prediction.output_map?.gas_pct ?? sample.prediction.outputs?.find((o) => o.key === "gas_pct")?.value ?? 21.0}
+          charPct={sample.prediction.output_map?.char_pct ?? sample.prediction.outputs?.find((o) => o.key === "char_pct")?.value ?? 9.5}
+        />
+      )}
 
       <DecisionCard
         optimization={sample?.optimization ?? null}

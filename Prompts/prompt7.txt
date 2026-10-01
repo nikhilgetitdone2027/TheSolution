@@ -1,0 +1,48 @@
+# TASK: UPGRADE SAATHI TO AN INTERACTIVE 3D TALKING HUMAN AVATAR (REACT THREE FIBER + ARKIT VISEMES)
+
+You are the senior frontend graphics engineer and avatar pipeline architect on the CHEM2ENERGY AI project.
+
+### OBJECTIVE
+Replace the flat 2D image/placeholder avatar in `saathi/` with a high-performance, real-time 3D interactive human avatar using `@react-three/fiber`, `@react-three/drei`, and `three`. The avatar must not look static or robotic; it must exhibit realistic micro-movements (eye saccades, randomized blinking, natural breathing) and time-aligned lip sync corresponding to Saathi's voice stream.
+
+---
+
+### 1. DEPENDENCY SETUP & MODEL ASSETS
+1. Install the required 3D and animation packages in the frontend:
+   ```bash
+   npm install three @react-three/fiber @react-three/drei
+   npm install -D @types/three
+
+
+   Place a professional, culturally resonant, rigged 3D human avatar model 
+   (.glb) equipped with standard ARKit blendshapes/morph targets into 
+   public/models/saathi.glb. (Use a standard Ready Player Me / Mixamo-compatible 
+   mesh with standard viseme morph targets such as viseme_aa, viseme_E, viseme_I, 
+   viseme_O, viseme_U, viseme_PP, viseme_SS, eyeBlinkLeft, eyeBlinkRight).
+   2. AVATAR ANIMATION CONTROLLER (src/saathi/avatar/AvatarController.tsx)
+   Create a canvas-based 3D component with procedural animation loops using
+    useFrame:Subtle Breathing Loop:Apply a continuous periodic sinusoidal oscillation
+     (Math.sin(clock.elapsedTime * 1.5)) to the chest/spine bone rotation (rotation.x)
+      and slight scale dilation to simulate natural diaphragmatic breathing.Gaze & Saccadic 
+      Eye Movements:Humans never stare with rigid focus. Implement subtle procedural 
+      eye saccades: every 1.5–3 seconds, gently nudge the eye target vector by 
+      small random offsets ($\pm 0.03\text{ rad}$) with smooth damping (THREE.MathUtils.lerp).
+      Track cursor coordinates when the mouse hovers over the dashboard, allowing the avatar
+       to gently follow cursor movement.Natural Randomized Blinking:Control eyeBlinkLeft
+        and eyeBlinkRight morph targets.Trigger a smooth blink curve every 3 to 6 seconds,
+         with occasional organic double-blinks.Procedural Emotional States 
+         (Driven by Saathi State Machine):IDLE: Calm posture, relaxed facial blendshapes, 
+         periodic gentle breathing.LISTENING: Tilt head slightly forward/sideways with an occasional subtle affirmative nod 
+         (rotation.x dip).THINKING: Head tilts upward by 5 degrees; 
+         eyes look slightly away to simulate active cognitive processing.
+         SPEAKING: Trigger real-time lip sync visemes and expressive eyebrow emphasis.
+         3. TIME-ALIGNED LIP-SYNC & VISEME DISPATCHERImplement src/saathi/avatar/useVisemeSync.ts:Connect to the active
+          audio playback pipeline using AudioContext and AnalyserNode.Map frequency 
+          bands to speech phoneme groups:Low frequencies ($100-400\text{ Hz}$): 
+          Jaw open (viseme_aa, jawOpen)Mid frequencies ($500-1500\text{ Hz}$):
+           Formants for rounded vowels (viseme_O, viseme_U)High frequencies
+            ($2000-4000\text{ Hz}$): Sibilants and fricatives (viseme_SS, viseme_FF)Smooth
+             morph target transitions using frame-rate independent linear interpolation (lerp with damping factor $\sim 0.25$) 
+             so the mouth moves fluidly without fluttering or snapping.Support direct viseme timestamp streams if Azure Speech / Web Speech SDK viseme events are emitted.4. UI INTEGRATION & RESPONSIVENESS (src/saathi/components/SaathiDrawer.tsx)Integrate the <Canvas> inside the persistent Saathi assistant panel:Configure high-performance canvas settings: gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}.Add balanced studio lighting (three-point setup: Key light, Soft Fill, and Rim/Backlight to highlight silhouette against dark dashboard themes).Add a fallback loading skeleton/loader while the 3D model loads.Respect accessibility standards: If prefers-reduced-motion is active, disable head tracking and aggressive rotations, maintaining only basic mouth movement during speech.5. VERIFICATION & SMOKE TESTVerify that the 3D avatar renders within the right-side drawer without WebGL memory leaks or canvas context recreation.Confirm the avatar blinks automatically and breathes naturally while idle.Test speech interaction: Speak or type a question (e.g., "Saathi, explain the predicted oil yield"), 
+             and verify the avatar transitions smoothly across 
+             THINKING -> SPEAKING with fluid, synchronous lip articulation.

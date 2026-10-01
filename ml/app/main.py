@@ -167,15 +167,36 @@ def simulate(body: SimulateRequest) -> dict[str, Any]:
     }
 
 
+from app.scientific_engine import compute_scientific_intelligence
+
+
 @app.post("/pathways")
 def pathways(body: PredictRequest) -> dict[str, Any]:
     _ready()
     prediction = predict_record(registry, _with_category(body.record, body.category), body.source_label)
     parsed = prediction["validation"]["parsed"] if prediction.get("validation") else body.record
+
+    oil_pct = 0.0
+    gas_pct = 0.0
+    char_pct = 0.0
+    if prediction.get("available") and prediction.get("output_map"):
+        oil_pct = float(prediction["output_map"].get("oil_pct", 0.0))
+        gas_pct = float(prediction["output_map"].get("gas_pct", 0.0))
+        char_pct = float(prediction["output_map"].get("char_pct", 0.0))
+
+    intelligence = compute_scientific_intelligence(
+        parsed=parsed,
+        oil_pct=oil_pct,
+        gas_pct=gas_pct,
+        char_pct=char_pct,
+        feed_mass_kg=1000.0,
+    )
+
     return {
         "prediction": prediction,
         "comparison": build_pathways(parsed, prediction),
         "flows": derived_mass_flows(parsed, prediction),
+        "intelligence": intelligence,
     }
 
 
@@ -189,11 +210,43 @@ def profile(body: ValidateRequest) -> dict[str, Any]:
         category=body.category,
         source_label=body.source_label,
     )
-    elemental = elemental_report(validation["parsed"])
+    parsed = validation["parsed"]
+    elemental = elemental_report(parsed)
+    # Provide preliminary stoichiometric and thermodynamic screening on raw composition
+    intelligence = compute_scientific_intelligence(
+        parsed=parsed,
+        oil_pct=60.0,
+        gas_pct=25.0,
+        char_pct=15.0,
+        feed_mass_kg=1000.0,
+    )
     return {
         "validation": validation,
         "elemental": elemental,
-        "heating_value": heating_value(validation["parsed"], elemental),
+        "heating_value": heating_value(parsed, elemental),
+        "intelligence": intelligence,
+    }
+
+
+@app.post("/intelligence")
+def intelligence(body: PredictRequest) -> dict[str, Any]:
+    _ready()
+    prediction = predict_record(registry, _with_category(body.record, body.category), body.source_label)
+    parsed = prediction["validation"]["parsed"] if prediction.get("validation") else body.record
+    oil_pct = float(prediction.get("output_map", {}).get("oil_pct", 60.0)) if prediction.get("available") else 60.0
+    gas_pct = float(prediction.get("output_map", {}).get("gas_pct", 25.0)) if prediction.get("available") else 25.0
+    char_pct = float(prediction.get("output_map", {}).get("char_pct", 15.0)) if prediction.get("available") else 15.0
+
+    scientific = compute_scientific_intelligence(
+        parsed=parsed,
+        oil_pct=oil_pct,
+        gas_pct=gas_pct,
+        char_pct=char_pct,
+        feed_mass_kg=1000.0,
+    )
+    return {
+        "prediction": prediction,
+        "intelligence": scientific,
     }
 
 

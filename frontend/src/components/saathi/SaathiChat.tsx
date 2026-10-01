@@ -10,6 +10,7 @@ import { SaathiActionCard, type Activity } from "./SaathiActionCard";
 import { SaathiAvatar } from "./SaathiAvatar";
 import { avatarStatusText, deriveAvatarState, type LocalState } from "./SaathiState";
 import { speakText, speechToTextSupported, startListening, stopSpeaking, textToSpeechSupported, voiceAvailable, type SpeechLanguage } from "./SaathiVoice";
+import { detectVoiceIntent } from "../../saathi/tools/intentDetector";
 
 type Preference = "auto" | SpeechLanguage;
 
@@ -165,8 +166,83 @@ export function SaathiChat() {
     if (!trimmed) return;
     listenRef.current?.stop();
     stopSpeaking();
-    setLocal("thinking");
     setLines((current) => [...current, trimmed]);
+
+    // Check for hands-free voice-driven action execution
+    const tempRange = store.model?.optimization_boundary.ranges.temperature_c ?? { min: 400, max: 700 };
+    const intentResult = detectVoiceIntent(trimmed, tempRange);
+    const langKey = language === "en" ? "en" : language === "hi" ? "hi" : "hinglish";
+
+    if (intentResult.matched) {
+      const responseText = intentResult.feedback[langKey] ?? intentResult.feedback.en;
+      setLines((current) => [...current, responseText]);
+
+      if (intentResult.intent === "set_temperature" && intentResult.value !== undefined) {
+        setActivity({ label: `Setting temperature to ${intentResult.value}°C`, tools: ["whatif_simulator"], state: "running" });
+        transitionTo(navigate, "/app/simulate");
+        void speak(responseText, language === "auto" ? "hinglish" : language);
+        try {
+          await store.simulate({ temperature_c: intentResult.value });
+          setActivity({ label: `Simulation updated for ${intentResult.value}°C`, tools: ["whatif_simulator"], state: "done" });
+        } catch {
+          setActivity({ label: "Simulation failed", tools: [], state: "error" });
+        }
+        return;
+      }
+
+      if (intentResult.intent === "run_analysis") {
+        setActivity({ label: "Executing ML prediction engine", tools: ["ml_surrogate"], state: "running" });
+        void speak(responseText, language === "auto" ? "hinglish" : language);
+        if (store.active) {
+          try {
+            await store.analyze();
+            await workflow.whenSettled();
+            transitionTo(navigate, "/app/predictions");
+            setActivity({ label: "Analysis complete", tools: ["ml_surrogate"], state: "done" });
+          } catch {
+            setActivity({ label: "Analysis failed", tools: [], state: "error" });
+          }
+        }
+        return;
+      }
+
+      if (intentResult.intent === "download_report") {
+        setActivity({ label: "Generating techno-economic report", tools: ["report_generator"], state: "running" });
+        void speak(responseText, language === "auto" ? "hinglish" : language);
+        transitionTo(navigate, "/app/reports");
+        try {
+          await store.createReport();
+          setActivity({ label: "Report ready", tools: ["report_generator"], state: "done" });
+        } catch {
+          setActivity({ label: "Report generation failed", tools: [], state: "error" });
+        }
+        return;
+      }
+
+      if (intentResult.intent === "open_what_if") {
+        void speak(responseText, language === "auto" ? "hinglish" : language);
+        transitionTo(navigate, "/app/simulate");
+        return;
+      }
+
+      if (intentResult.intent === "chemical_question") {
+        setLines((current) => [...current, responseText]);
+        setActivity({
+          label:
+            intentResult.questionType === "hcl_risk"
+              ? "Stoichiometric Acid Gas Scrubber sizing"
+              : intentResult.questionType === "energy_positive"
+              ? "Thermodynamics & Energy Autarky balance"
+              : "Pyrolysis Oil H/C & PONA Refinery Assessment",
+          tools: ["stoichiometry", "thermodynamics", "oil_quality"],
+          state: "done",
+        });
+        void speak(responseText, language === "auto" ? "hinglish" : language);
+        return;
+      }
+    }
+
+    setLocal("thinking");
     setActivity({ label: "Reading application data", tools: [], state: "running" });
     try {
       const result = await api.saathi({

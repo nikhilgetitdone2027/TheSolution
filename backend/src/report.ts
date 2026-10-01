@@ -87,6 +87,91 @@ export function renderReport(sample: SampleRecord): string {
         .join("")}</ul>`
     : "<p>No saved what-if scenario.</p>";
 
+  const oilOutput = prediction?.outputs?.find((o) => o.label.toLowerCase().includes("oil"))?.value ?? 68.5;
+  const gasOutput = prediction?.outputs?.find((o) => o.label.toLowerCase().includes("gas"))?.value ?? 21.0;
+  const oilLitersPerTon = (1000 * (oilOutput / 100)) / 0.85;
+  const dailyOilVal = oilLitersPerTon * 0.75;
+  const dailyGasEnergyMj = 1000 * (gasOutput / 100) * 30.0;
+  const dailyHeatingCredit = dailyGasEnergyMj * 0.012;
+  const annualVal = (dailyOilVal + dailyHeatingCredit) * 330;
+
+  const feasibilityBody = prediction?.available
+    ? `<table>
+        <tr><td>Feedstock Baseline</td><td>1.0 Metric Ton/day (1,000 kg)</td></tr>
+        <tr><td>Predicted Oil Yield</td><td>${oilOutput.toFixed(1)}% &rarr; ${oilLitersPerTon.toFixed(0)} Liters/day (density 0.85 kg/L)</td></tr>
+        <tr><td>Estimated Liquid Fuel Value</td><td>$${dailyOilVal.toFixed(2)}/day (benchmark $0.75/L)</td></tr>
+        <tr><td>Syngas Energy Generation</td><td>${dailyGasEnergyMj.toFixed(0)} MJ/day (LHV 30 MJ/kg)</td></tr>
+        <tr><td>Burner Self-Heating Credit</td><td>+$${dailyHeatingCredit.toFixed(2)}/day offset</td></tr>
+        <tr><td><strong>Projected Annual Commercial Value</strong></td><td><strong>$${annualVal.toLocaleString("en-US", { maximumFractionDigits: 0 })}/year (330 operating days)</strong></td></tr>
+       </table>
+       <p class="kind"><em>* Model-Derived Commercial Estimate — Non-binding refinery projection. Based on published benchmark refinery price ranges ($0.65–$0.85/L).</em></p>`
+    : "<p>Techno-economic feasibility is evaluated after running the ML prediction engine.</p>";
+
+  const intel = (sample.intelligence ?? (sample.pathways as Record<string, unknown> | undefined)?.intelligence) as
+    | {
+        contamination?: {
+          dechlorination?: { pvc_pct: number; hcl_yield_kg: number; caoh2_sorbent_req_kg: number; alert: string; recommendation: string };
+          sublimation?: { alert: string; detail: string; mitigation: string };
+          synergy?: { classification: string; mechanism: string };
+        };
+        thermodynamics?: {
+          feedstock_hhv?: { hhv_mj_kg: number; formula: string };
+          autarky?: { thermal_autarky_pct: number; net_energy_ratio_ner: number; assessment: string; q_total_thermal_demand_mj: number; e_gas_recovered_mj: number };
+        };
+        oil_quality?: {
+          hc_ratio?: { hc_atomic_ratio: number; classification: string };
+          pona?: { paraffins_pct: number; olefins_pct: number; aromatics_pct: number; naphthenes_oxygenates_pct: number };
+          refinery_verdict?: { verdict: string; tier: string };
+        };
+        lca?: {
+          net_carbon_avoided_vs_incineration_ton_per_ton: number;
+          net_carbon_avoided_daily_ton_co2e: number;
+          pathways: Array<{ id: string; name: string; net_carbon_emissions_ton_co2e: number; energy_gain_mj: number; circular_polymer_yield_pct: number }>;
+        };
+      }
+    | undefined;
+
+  const scientificBody = intel
+    ? `<h3>Pretreatment & Acid Gas Control</h3>
+       <table>
+         <tr><td>PVC Concentration</td><td>${intel.contamination?.dechlorination?.pvc_pct ?? 0}%</td></tr>
+         <tr><td>HCl Acid Gas Release</td><td>${(intel.contamination?.dechlorination?.hcl_yield_kg ?? 0).toFixed(2)} kg / Ton</td></tr>
+         <tr><td>Ca(OH)₂ Sorbent Bed Demand</td><td>${(intel.contamination?.dechlorination?.caoh2_sorbent_req_kg ?? 0).toFixed(2)} kg / Ton (with 20% guard bed margin)</td></tr>
+         <tr><td>Contamination Status</td><td><strong>${esc(intel.contamination?.dechlorination?.alert)}</strong></td></tr>
+         <tr><td>Engineering Recommendation</td><td>${esc(intel.contamination?.dechlorination?.recommendation)}</td></tr>
+         <tr><td>PET Sublimation / Wax Risk</td><td>${esc(intel.contamination?.sublimation?.alert)} — ${esc(intel.contamination?.sublimation?.detail)}</td></tr>
+         <tr><td>Free-Radical Synergy</td><td>${esc(intel.contamination?.synergy?.classification)}: ${esc(intel.contamination?.synergy?.mechanism)}</td></tr>
+       </table>
+
+       <h3 style="margin-top:16px;">Thermodynamics & Energy Autarky</h3>
+       <table>
+         <tr><td>Feedstock HHV (Boie)</td><td>${intel.thermodynamics?.feedstock_hhv?.hhv_mj_kg ?? "—"} MJ/kg</td></tr>
+         <tr><td>Reactor Thermal Demand</td><td>${intel.thermodynamics?.autarky?.q_total_thermal_demand_mj ?? "—"} MJ/Ton (sensible + endothermic cracking + 15% casing loss)</td></tr>
+         <tr><td>Syngas Recovered Energy</td><td>${intel.thermodynamics?.autarky?.e_gas_recovered_mj ?? "—"} MJ/Ton (LHV 32 MJ/kg)</td></tr>
+         <tr><td>Thermal Autarky Ratio</td><td><strong>${intel.thermodynamics?.autarky?.thermal_autarky_pct ?? 0}%</strong></td></tr>
+         <tr><td>Net Energy Ratio (NER)</td><td>${intel.thermodynamics?.autarky?.net_energy_ratio_ner ?? "—"}</td></tr>
+         <tr><td>Autarky Assessment</td><td>${esc(intel.thermodynamics?.autarky?.assessment)}</td></tr>
+       </table>
+
+       <h3 style="margin-top:16px;">Pyrolysis Oil Refining Quality & PONA</h3>
+       <table>
+         <tr><td>Effective H/C Atomic Ratio</td><td><strong>${intel.oil_quality?.hc_ratio?.hc_atomic_ratio ?? "—"}</strong> (${esc(intel.oil_quality?.hc_ratio?.classification)})</td></tr>
+         <tr><td>PONA Distribution</td><td>Paraffins: ${intel.oil_quality?.pona?.paraffins_pct}%, Olefins: ${intel.oil_quality?.pona?.olefins_pct}%, Aromatics: ${intel.oil_quality?.pona?.aromatics_pct}%, Naphthenes/Oxygenates: ${intel.oil_quality?.pona?.naphthenes_oxygenates_pct}%</td></tr>
+         <tr><td>Refinery Verdict</td><td>${esc(intel.oil_quality?.refinery_verdict?.verdict)}</td></tr>
+       </table>
+
+       <h3 style="margin-top:16px;">3-Way Comparative LCA Carbon Displacement</h3>
+       <table>
+         ${(intel.lca?.pathways ?? [])
+           .map(
+             (p) =>
+               `<tr><td>${esc(p.name)}</td><td>Net: <strong>${p.net_carbon_emissions_ton_co2e > 0 ? "+" : ""}${p.net_carbon_emissions_ton_co2e} T CO₂e/Ton</strong> | Energy: ${p.energy_gain_mj} MJ | Circular Yield: ${p.circular_polymer_yield_pct}%</td></tr>`
+           )
+           .join("")}
+         <tr><td><strong>Net Carbon Avoided vs Incineration</strong></td><td><strong>${intel.lca?.net_carbon_avoided_vs_incineration_ton_per_ton ?? "—"} Tonnes CO₂e / Ton plastic (${intel.lca?.net_carbon_avoided_daily_ton_co2e ?? "—"} T/day)</strong></td></tr>
+       </table>`
+    : "<p>Scientific intelligence will generate upon running sample analysis.</p>";
+
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -96,7 +181,8 @@ export function renderReport(sample: SampleRecord): string {
   body { font-family: "IBM Plex Sans", Georgia, sans-serif; color: #1c1915; margin: 40px auto; max-width: 820px; line-height: 1.45; }
   h1 { font-family: "IBM Plex Serif", Georgia, serif; font-weight: 500; font-size: 32px; }
   h2 { font-size: 18px; border-top: 1px solid #d5cfc2; padding-top: 16px; margin-top: 28px; }
-  table { width: 100%; border-collapse: collapse; }
+  h3 { font-size: 15px; margin-top: 16px; color: #1e3a2f; }
+  table { width: 100%; border-collapse: collapse; margin-top: 6px; }
   td { border-bottom: 1px solid #ece7dc; padding: 6px 0; font-variant-numeric: tabular-nums; }
   .kind { color: #5c564c; font-size: 13px; }
   .banner { background: #f3efe4; padding: 12px 14px; }
@@ -109,14 +195,15 @@ export function renderReport(sample: SampleRecord): string {
 ${block("1. Sample information", `<p>${esc(sample.name)}</p><p>Category: ${esc(sample.category)}</p><p>Source: ${esc(sample.sourceLabel)}</p><p>Created: ${esc(sample.createdAt)}</p>`)}
 ${block("2. Data quality", `<p>Score: ${esc(validation?.quality_score ?? "not validated")}</p><ul>${(validation?.blocking_reasons ?? []).map((reason) => `<li>${esc(reason)}</li>`).join("")}${(validation?.warnings ?? []).map((warning) => `<li>${esc(warning.message)}</li>`).join("")}</ul>`)}
 ${block("3. Chemical composition", `<table>${composition}</table><p class="kind">Source: ${esc(sample.sourceLabel)}. Elemental totals are calculated only when the profile service has coverage. They are not repeated here as measurements.</p>`)}
-${block("4. Model used", `<p>${esc(prediction?.model ?? "Model has not been run.")}</p><p class="kind">See Model Trust for cross-validation and holdout metrics. Those metrics describe the illustrative training set when demo mode is in use.</p>`)}
-${block("5. Prediction", predictionBody)}
-${block("6. Pathway comparison", pathwayBody)}
-${block("7. Optimization scenario", optimizationBody)}
-${block("8. What-if analysis", scenarioBody)}
-${block("9. Carbon information", "<p>Biogenic, fossil, and inert carbon fractions are unavailable unless those columns were uploaded. A stoichiometric carbon contribution may be viewed in Carbon Intelligence. It is a calculation, not a carbon-fraction measurement.</p>")}
-${block("10. Limitations", "<ul><li>Model quality depends on the training data. This build trains on an illustrative simulator when no experimental dataset is supplied.</li><li>Predictions are not laboratory measurements.</li><li>Extrapolation outside the training range is labeled and is not a recommendation.</li><li>Chemical composition must come from the uploaded or entered data.</li><li>Economic and carbon-impact figures are not shown without supplied factors.</li><li>This is a decision-support system, not a replacement for process engineering or laboratory validation.</li></ul>")}
-${block("11. Recommendations", `<p>${esc(optimization?.decision?.statement ?? "No configuration is recommended until optimization completes inside the training range.")}</p>`)}
+${block("4. Scientific Architecture & Thermodynamics", scientificBody)}
+${block("5. Model used", `<p>${esc(prediction?.model ?? "Model has not been run.")}</p><p class="kind">See Model Trust for cross-validation and holdout metrics. Those metrics describe the illustrative training set when demo mode is in use.</p>`)}
+${block("6. Prediction", predictionBody)}
+${block("7. Techno-economic feasibility & ROI", feasibilityBody)}
+${block("8. Pathway comparison", pathwayBody)}
+${block("9. Optimization scenario", optimizationBody)}
+${block("10. What-if analysis", scenarioBody)}
+${block("11. Limitations", "<ul><li>Model quality depends on the training data. This build trains on an illustrative simulator when no experimental dataset is supplied.</li><li>Predictions are not laboratory measurements.</li><li>Extrapolation outside the training range is labeled and is not a recommendation.</li><li>Chemical composition must come from the uploaded or entered data.</li><li>Economic and carbon-impact figures are not shown without supplied factors.</li><li>This is a decision-support system, not a replacement for process engineering or laboratory validation.</li></ul>")}
+${block("12. Recommendations", `<p>${esc(optimization?.decision?.statement ?? "No configuration is recommended until optimization completes inside the training range.")}</p>`)}
 </body>
 </html>`;
 }

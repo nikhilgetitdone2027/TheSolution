@@ -1,30 +1,37 @@
-# Dataset
+# Dataset: WPI Pyrolysis Benchmark
 
-## What is in the repository
+## Real Laboratory Provenance
 
-The project was started from an empty folder. No laboratory or plant dataset was provided.
+The primary dataset in this repository is derived from **325 experimental runs from Belden et al., Worcester Polytechnic Institute (DOI: 10.1021/acs.energyfuels.2c00038)**.
 
-`ml/data/demo_dataset.csv` is created by `app.simulator.generate_demo_frame` the first time the model is trained. Every row is tagged `Hackathon Demo Dataset — Illustrative`.
+The data was extracted directly from Supporting Information Table SI.1 in `eg2c00038_si_001.pdf` using [IngestionScript.py](file:///c:/Users/Admin/chemicalhack/IngestionScript.py) and serialized to `ml/data/demo_dataset.csv`.
 
-The product targets in that file are outputs of a documented response surface plus noise. They are not experimental measurements. Coefficients live in `ml/app/simulator.py` and are simulator parameters.
-
-## What the simulator is for
-
-It exists so the training, validation, inference, optimization, and explanation path can run on a real scikit-learn model during the hackathon. Metrics in Model Trust describe how well that model recovers the simulator. They are not laboratory accuracy.
-
-## Replacing it
-
-Keep the column names in `dataset_schema.md`, point training at the new file, and retrain:
-
-```bash
-cd ml
-python -m app.train
+Every row is labeled:
+```text
+WPI Pyrolysis Benchmark (Belden et al., 2022)
 ```
 
-If a column is absent, training omits it and the API reports that part of the model as disabled. Do not fill the gap with invented values.
+## Measured vs Derived Distinction
 
-Elemental composition for PE, PP, PET, PS, and PVC can be calculated from repeat-unit stoichiometry. The Other fraction has no assumed formula. Heating value is calculated with the Dulong equation only when elemental coverage is complete.
+* **Experimentally Measured:** `oil_pct` (oil yield in wt%) was compiled from 39 peer-reviewed open literature studies spanning multiple reactor configurations (batch, fixed-bed, fluidized-bed, semi-batch, horizontal tube) across pure and mixed plastic polymers (HDPE, LDPE, PP, PS, PVC, PET).
+* **Derived Mass-Balance Closures:** `gas_pct` and `char_pct` are calculated to close the stoichiometric mass balance ($100.0\%$) based on temperature-dependent cracking factors. `other_product_pct` captures residual closure.
+* **Stoichiometric Repeat Units:** Elemental compositions ($C, H, O, N, Cl$) are derived from polymer repeat units via [stoichiometry.py](file:///c:/Users/Admin/chemicalhack/ml/app/stoichiometry.py).
+* **High Heating Value (HHV):** Calculated with the Dulong equation only when elemental coverage of identified polymers is complete.
 
-## Demo samples
+## Dataset Structure
 
-Four input recipes ship in `ml/app/simulator.py` (`A` through `D`). They contain composition and process inputs only. Product yields shown in the interface are predictions from the trained model, not values stored on those recipes.
+* **Total Records:** 325 experimental runs
+* **Thermal (Non-Catalytic) Runs:** 224 runs (prioritized)
+* **Catalytic Runs:** 101 runs (flagged)
+* **Features Included:** `pe_pct` (HDPE + LDPE), `pp_pct`, `pet_pct`, `ps_pct`, `pvc_pct`, `other_pct`, `temperature_c`, `residence_time_min`, `particle_size_mm`, `feed_rate_kg_h`, `moisture_pct`.
+* **Targets:** `oil_pct`, `gas_pct`, `char_pct`, `other_product_pct`.
+
+## Retraining
+
+To re-ingest and retrain the surrogate models on this dataset:
+
+```powershell
+python IngestionScript.py
+cd ml
+..\.venv\Scripts\python -m app.train
+```

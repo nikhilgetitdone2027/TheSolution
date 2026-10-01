@@ -14,6 +14,7 @@ export type Sample = {
   explanation: Explanation | null;
   scenarios: Scenario[];
   reportHtml: string | null;
+  intelligence?: ScientificIntelligence | null;
 };
 
 export type Validation = {
@@ -87,6 +88,7 @@ export type PathwayComparison = {
   heating_value: HeatingValue;
   context: Array<{ topic: string; detail: string }>;
   pathways: Pathway[];
+  intelligence?: ScientificIntelligence | null;
 };
 
 export type ElementalProfile = {
@@ -257,4 +259,114 @@ export type Profile = {
   validation: Validation;
   elemental: ElementalProfile;
   heating_value: HeatingValue;
+  intelligence?: ScientificIntelligence | null;
+};
+
+export type ScientificIntelligence = {
+  contamination: {
+    dechlorination: {
+      pvc_pct: number;
+      feed_mass_kg: number;
+      pvc_mass_kg: number;
+      hcl_yield_kg: number;
+      caoh2_sorbent_req_kg: number;
+      safety_factor: number;
+      risk_level: "HIGH" | "NORMAL";
+      alert: "ACID_GAS_CORROSION_RISK" | "NORMAL_OPERATION";
+      recommendation: string;
+      neutralization_reaction: string;
+      stoichiometric_basis: string;
+    };
+    sublimation: {
+      pet_pct: number;
+      risk_level: "HIGH" | "LOW";
+      alert: "SOLID_DEPOSITION_RISK" | "MINIMAL_SUBLIMATION_RISK";
+      detail: string;
+      mitigation: string;
+    };
+    synergy: {
+      classification: "HIGH_SYNERGY" | "NEUTRAL" | "ANTAGONISTIC";
+      polyolefin_pct: number;
+      ps_pct: number;
+      synergy_score: number;
+      mechanism: string;
+    };
+    hcl_corrosion_risk: boolean;
+    caoh2_daily_kg: number;
+  };
+  thermodynamics: {
+    elemental_blend: { C: number; H: number; O: number; Cl: number };
+    feedstock_hhv: { hhv_mj_kg: number; formula: string; method: string };
+    autarky: {
+      feed_mass_kg: number;
+      temperature_c: number;
+      gas_mass_kg: number;
+      oil_mass_kg: number;
+      e_gas_recovered_mj: number;
+      e_oil_recovered_mj: number;
+      q_total_thermal_demand_mj: number;
+      parasitic_elec_mj: number;
+      thermal_autarky_pct: number;
+      autarky_ratio: number;
+      net_energy_ratio_ner: number;
+      self_sustained: boolean;
+      assessment: string;
+      thermal_breakdown: {
+        q_sensible_mj: number;
+        q_reaction_mj: number;
+        q_casing_loss_mj: number;
+        q_total_thermal_mj: number;
+        cp_kj_kg_k: number;
+        delta_h_rxn_kj_kg: number;
+        loss_factor_pct: number;
+      };
+    };
+  };
+  oil_quality: {
+    oil_elemental: { C_oil_wt: number; H_oil_wt: number; O_oil_wt: number; Cl_oil_wt: number };
+    hc_ratio: {
+      hc_atomic_ratio: number;
+      classification: string;
+      color_badge: "emerald" | "amber" | "rose";
+      c_oil_wt: number;
+      h_oil_wt: number;
+    };
+    pona: {
+      paraffins_pct: number;
+      olefins_pct: number;
+      aromatics_pct: number;
+      naphthenes_oxygenates_pct: number;
+      pona_sum_pct: number;
+      dominant_fraction: string;
+    };
+    refinery_verdict: {
+      route_id: "steam_cracker" | "hydroprocessing" | "industrial_fuel_oil";
+      verdict: string;
+      tier: string;
+      hydrotreatment_mandatory: boolean;
+    };
+  };
+  lca: {
+    basis: string;
+    plant_daily_tpd: number;
+    carbon_fraction_used: number;
+    pathways: Array<{
+      id: "landfill" | "incineration" | "pyrolysis";
+      name: string;
+      gross_carbon_emissions_ton_co2e?: number;
+      grid_displacement_credit_ton_co2e?: number;
+      process_footprint_ton_co2e?: number;
+      naphtha_displacement_credit_ton_co2e?: number;
+      net_carbon_emissions_ton_co2e: number;
+      net_carbon_kg_per_kg: number;
+      energy_gain_mj: number;
+      circular_polymer_yield_pct: number;
+      badge: string;
+      advantages?: string[];
+      disadvantages?: string[];
+    }>;
+    net_carbon_avoided_vs_incineration_ton_per_ton: number;
+    net_carbon_avoided_daily_ton_co2e: number;
+    methodology: string;
+  };
 };

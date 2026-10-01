@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { WhatIfComparison } from "../components/animations/WhatIfComparison";
 import { StepBadge } from "../components/animations/StepBadge";
 import { GroupedBars } from "../components/Charts";
+import { ReactorDigitalTwin3D } from "../components/reactor/ReactorDigitalTwin3D";
 import { showNumber } from "../format";
 import { useAnalysis } from "../state/AnalysisContext";
 import { useWorkflow } from "../workflow/engine";
@@ -25,6 +26,8 @@ export function WhatIf() {
   }
 
   const current = (key: (typeof CONTROLS)[number]) => draft[key] ?? Number(base[key] ?? boundary[key].min);
+  const activeTemp = current("temperature_c");
+  const pePpRatio = ((Number(base.pe_pct ?? 0) + Number(base.pp_pct ?? 0)) || 65) / 100;
 
   function change(key: string, value: number) {
     const next = { ...draft, [key]: value };
@@ -54,6 +57,14 @@ export function WhatIf() {
         <p className="mt-2 max-w-2xl text-sm leading-6 text-muted">Explore how process changes affect predicted outcomes.</p>
         <p className="mt-1 text-sm text-muted">Controls stay inside the training range. The prediction re-runs shortly after you stop moving a slider.</p>
       </header>
+
+      {/* 3D Pyrolysis Reactor Digital Twin */}
+      <ReactorDigitalTwin3D
+        temperatureC={activeTemp}
+        pePpFraction={pePpRatio}
+        residenceTimeMin={current("residence_time_min")}
+        feedRateKgH={current("feed_rate_kg_h")}
+      />
       <div className="grid gap-4 lg:grid-cols-[0.8fr_1.2fr]">
         <section className="border border-line bg-surface p-4">
           {CONTROLS.map((key) => {

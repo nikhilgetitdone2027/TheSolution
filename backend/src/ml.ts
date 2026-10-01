@@ -98,4 +98,9 @@ export const ml = {
       method: "POST",
       body: JSON.stringify({ record, category, source_label: sourceLabel }),
     }),
+  intelligence: (record: Record<string, unknown>, category: string, sourceLabel: string) =>
+    call<Record<string, unknown>>("/intelligence", {
+      method: "POST",
+      body: JSON.stringify({ record, category, source_label: sourceLabel }),
+    }),
 };

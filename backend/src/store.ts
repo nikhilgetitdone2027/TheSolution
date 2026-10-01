@@ -21,6 +21,7 @@ export type SampleRecord = {
   explanation: unknown;
   scenarios: Array<Record<string, unknown>>;
   reportHtml: string | null;
+  intelligence?: unknown;
 };
 
 type Store = { samples: SampleRecord[] };
