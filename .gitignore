@@ -1,0 +1,12 @@
+node_modules/
+dist/
+.venv/
+.tools/
+__pycache__/
+.pytest_cache/
+*.pyc
+.env
+ml/artifacts/
+backend/data/store.json
+frontend/dist/
+.DS_Store

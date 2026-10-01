@@ -1,0 +1,20 @@
+services:
+  ml:
+    build: ./ml
+    ports:
+      - "8000:8000"
+  api:
+    build: ./backend
+    environment:
+      ML_SERVICE_URL: http://ml:8000
+      PORT: "4000"
+    ports:
+      - "4000:4000"
+    depends_on:
+      - ml
+  web:
+    build: ./frontend
+    ports:
+      - "8080:80"
+    depends_on:
+      - api
