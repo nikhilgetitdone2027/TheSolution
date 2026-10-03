@@ -1,0 +1,78 @@
+﻿# MASTER IMPLEMENTATION SPEC: ADVANCED INDUSTRIAL AI & IMMERSIVE SAATHI FEATURES
+
+You are the Lead Full-Stack Architect, 3D WebGL Graphics Specialist, and AI Product Strategist on the CHEM2ENERGY AI platform.
+
+Your task is to implement the following 6 production-grade features into the existing platform without breaking current scientific routes, ML surrogate models, or data validation logic.
+
+============================================================
+FEATURE 1: SAATHI GAZE, HEAD TRACKING & PROCEDURAL GESTURES
+============================================================
+1. In `src/saathi/avatar/` (or the active avatar controller):
+   - Track mouse coordinates across the dashboard window (`window.addEventListener('mousemove')`).
+   - Normalize cursor position to screen space $[-1, 1]$ and gently rotate the avatar's neck/head bones (`neckBone.rotation.y` and `neckBone.rotation.x`) using smooth linear interpolation (`THREE.MathUtils.lerp(..., 0.05)`) with clamped angles ($\pm 15^\circ$) so the avatar naturally follows the cursor.
+   - When transitioning to `SPEAKING` state upon an ML inference reveal:
+     - Trigger an affirmative head nod (subtle dip and rebound on `rotation.x`).
+     - Trigger gentle conversational eyebrow elevation via blendshapes (`browInnerUp` or similar).
+
+============================================================
+FEATURE 2: REAL-TIME AUDIO FREQUENCY WAVEFORM VISUALIZER
+============================================================
+1. In the Saathi panel footer/avatar card:
+   - Connect the active TTS speech synthesis playback stream to an `AudioContext` and `AnalyserNode` (`fftSize = 64` or `128`).
+   - Render a high-performance Canvas or SVG audio visualizer bar/wave directly beneath the avatar.
+   - When Saathi speaks, display real-time animated frequency bars (industrial green/emerald theme matching the app palette) indicating voice activity.
+   - When idle/listening, smoothly return the waveform to a low-amplitude flat baseline line.
+
+============================================================
+FEATURE 3: 3D PYROLYSIS REACTOR DIGITAL TWIN (WHAT-IF LAB)
+============================================================
+1. Create a dedicated lightweight 3D canvas inside the What-If Simulation Lab:
+   - Render a procedural 3D industrial reactor cylinder/kiln with inlet feed hopper and condenser collection pipe using Three.js primitives or a clean GLTF mesh.
+   - Dynamically bind reactor surface emissive color to the active temperature slider:
+     * 400Â°C: Cool dark metallic / subtle amber glow
+     * 500Â°C: Moderate orange glow
+     * 650Â°C+: High-heat bright crimson/white-hot thermal gradient
+   - Render an animated particle system inside/exiting the chamber:
+     * High PE/PP yields denser vapor particles flowing to the condenser.
+     * High temperature increases stream velocity into the syngas valve.
+
+============================================================
+FEATURE 4: HANDS-FREE VOICE-DRIVEN ACTION EXECUTION
+============================================================
+1. In `src/saathi/tools/` and `src/saathi/speech/`:
+   - Parse user voice transcriptions through intent detection for direct UI actions:
+     * "Set temperature to X" / "Temperature X degree karo" -> Trigger `setWhatIfParameter('temperature', X)` and debounce ML prediction re-run.
+     * "Analyze sample" / "Analysis start karo" -> Dispatch `runAnalysis()` workflow event.
+     * "Download report" / "Report banao" -> Trigger client PDF/Markdown report generator.
+   - Ensure safety: Validate that parameter values remain strictly within the model's supported empirical training boundary (e.g. 400Â°C â€“ 700Â°C) before applying state changes.
+
+============================================================
+FEATURE 5: TECHNO-ECONOMIC FEASIBILITY & ROI LAYER
+============================================================
+1. In the Impact / Overview view and Report generation:
+   - Add a "Commercial Feasibility Estimator" card based on real model output:
+     * Feedstock baseline: Default to 1 Ton/day (1000 kg).
+     * Yield conversion: Calculate liters of pyrolysis oil generated based on predicted `oil_pct` ($\text{density} \approx 0.85\text{ kg/L}$).
+     * Estimated crude value: Apply benchmark crude/industrial diesel replacement price ($0.65 â€“ $0.85 / L).
+     * Energy credit: Calculate syngas calorific value ($\text{LHV} \approx 30\text{ MJ/kg}$) for reactor self-heating offset.
+   - Label all figures with clear provenance: *"Model-Derived Commercial Estimate â€” Non-binding refinery projection"*.
+
+============================================================
+FEATURE 6: 1-CLICK AUTONOMOUS JUDGE DEMO MODE
+============================================================
+1. Add a prominent "Start Judge Tour" (or "Autonomous Walkthrough") CTA in the global topbar.
+2. When triggered:
+   - Activate an autonomous step-by-step presentation timeline (total runtime ~90â€“120 seconds):
+     * Step 1 (0-15s): Saathi introduces the platform (Hinglish/English toggleable) and selects Sample #001.
+     * Step 2 (15-35s): Shows Material Balance confirmation and streams inputs into ML Engine.
+     * Step 3 (35-55s): Reveals multi-target yields (Oil/Gas/Char %) with Sankey distribution.
+     * Step 4 (55-80s): Opens What-If Lab, automatically shifts temperature to 520Â°C, and shows delta comparison.
+     * Step 5 (80-100s): Displays Model Trust center (highlighting 325 WPI experimental runs) and summarizes recovery recommendations.
+   - Provide an immediate "Pause / Stop Tour" button if the judge clicks any interactive control manually.
+
+============================================================
+CONSTRAINTS & SCIENTIFIC HONESTY
+============================================================
+- Do not fabricate numbers or hardcode fake yields. All outputs must flow through the trained scikit-learn models and mass balance calculations.
+- Preserve full responsiveness and support `prefers-reduced-motion` across all newly created 3D animations and particle systems.
+- Report all modified and created files upon completion.

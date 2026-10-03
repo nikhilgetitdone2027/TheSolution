@@ -7,6 +7,7 @@ import { formatNumber } from "../format";
 import { GuidedDemoBar } from "../workflow/GuidedDemo";
 import { JudgeTourBanner, useJudgeTour } from "../workflow/JudgeTourController";
 import { AnalysisTheater, TheaterReopen } from "./animations/AnalysisTheater";
+import { AnimatedBackground } from "./layout/AnimatedBackground";
 
 const LINKS: Array<{ to: string; label: string; end?: boolean; needs?: "sample" | "prediction" | "pathways" | "optimized" }> = [
   { to: "/app", label: "Overview", end: true },
@@ -53,8 +54,9 @@ export function Shell({ children }: { children: ReactNode }) {
   }, [location.pathname]);
 
   return (
-    <div className="min-h-screen bg-paper text-ink md:grid md:grid-cols-[240px_1fr]">
-      <aside className={`${open ? "block" : "hidden"} border-b border-white/10 bg-sidebar text-[#efe8dc] md:block md:min-h-screen`}>
+    <div className="relative min-h-screen bg-paper text-ink md:grid md:grid-cols-[240px_1fr]">
+      <AnimatedBackground />
+      <aside className={`${open ? "block" : "hidden"} relative z-10 border-b border-white/10 bg-sidebar text-[#efe8dc] md:block md:min-h-screen`}>
         <div className="px-5 py-6">
           <p className="font-serif text-xl tracking-tight">CHEM2ENERGY</p>
           <p className="mt-1 text-xs uppercase tracking-[0.16em] text-[#c8bfae]">Recovery decisions</p>
@@ -94,9 +96,9 @@ export function Shell({ children }: { children: ReactNode }) {
           </NavLink>
         </div>
       </aside>
-      <div className="min-w-0">
+      <div className="relative z-10 min-w-0">
         <JudgeTourBanner />
-        <header className="border-b border-line bg-surface">
+        <header className="border-b border-line bg-surface/85 backdrop-blur-md">
           <div className="flex flex-wrap items-center justify-between gap-3 px-4 py-3 md:px-6">
             <button className="border border-line px-3 py-1 text-sm md:hidden" type="button" onClick={() => setOpen((value) => !value)}>
               Menu
@@ -162,9 +164,9 @@ export function Shell({ children }: { children: ReactNode }) {
 
 function Status({ label, value }: { label: string; value: string }) {
   return (
-    <div className="min-w-0">
-      <p className="text-[11px] uppercase tracking-[0.14em] text-muted">{label}</p>
-      <p className="truncate text-sm font-medium">{value}</p>
+    <div className="min-w-0 rounded-lg border border-line/60 bg-paper/50 px-2.5 py-1.5 backdrop-blur-sm transition-all hover:border-emerald-500/40 hover:bg-paper/75">
+      <p className="text-[10px] font-mono uppercase tracking-[0.14em] text-muted">{label}</p>
+      <p className="truncate text-xs font-semibold font-mono text-ink">{value}</p>
     </div>
   );
 }
@@ -192,11 +194,11 @@ export function QualityMeter({ score }: { score: number }) {
   return (
     <div>
       <div className="mb-1 flex justify-between text-sm">
-        <span>Data quality</span>
-        <span className="tabular font-medium">{formatNumber(score, 0)}%</span>
+        <span className="text-xs font-mono uppercase text-muted">Data quality</span>
+        <span className="tabular font-mono font-medium text-emerald-600">{formatNumber(score, 0)}%</span>
       </div>
-      <div className="h-2 bg-paper2" role="meter" aria-valuenow={score} aria-valuemin={0} aria-valuemax={100} aria-label="Data quality">
-        <div className="h-2 bg-pine" style={{ width: `${Math.max(0, Math.min(100, score))}%` }} />
+      <div className="h-2 w-full overflow-hidden rounded-full bg-paper2" role="meter" aria-valuenow={score} aria-valuemin={0} aria-valuemax={100} aria-label="Data quality">
+        <div className="liquid-bar-fill h-2 rounded-full bg-emerald-600" style={{ width: `${Math.max(0, Math.min(100, score))}%` }} />
       </div>
     </div>
   );

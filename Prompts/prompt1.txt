@@ -1,0 +1,2049 @@
+﻿You are a senior full-stack engineer, ML engineer, AI product architect, data scientist, UX designer and hackathon product strategist.
+
+I am building a high-impact hackathon project for an environmental hackathon under the â€œWaste and Energyâ€ track.
+
+The project name is:
+
+CHEM2ENERGY AI
+
+Tagline:
+
+â€œFrom Waste Composition to the Best Recovery Pathway.â€
+
+============================================================
+1. PRODUCT VISION
+============================================================
+
+Build a complete, polished, production-quality AI-powered software platform that helps waste-processing operators understand a chemically characterized waste stream and decide what recovery pathway should be considered.
+
+The platform must NOT be a generic waste-management dashboard.
+
+The central concept is:
+
+WASTE COMPOSITION
+        â†“
+CHEMICAL / MATERIAL PROFILE
+        â†“
+AI / ML PREDICTION
+        â†“
+MULTIPLE TREATMENT PATHWAYS
+        â†“
+OUTCOME PREDICTION
+        â†“
+OPTIMIZATION
+        â†“
+WHAT-IF SIMULATION
+        â†“
+EXPLAINABLE RECOMMENDATION
+        â†“
+ENERGY / MATERIAL / CARBON IMPACT
+
+The core question the product answers is:
+
+â€œGiven the composition and process characteristics of this waste stream, what recovery pathway and operating configuration should be evaluated?â€
+
+Do not reduce the project to:
+
+â€œUpload CSV â†’ predict something â†’ show a graph.â€
+
+The entire experience must feel like an intelligent industrial decision-support system.
+
+============================================================
+2. IMPORTANT SCIENTIFIC SCOPE
+============================================================
+
+This is a SOFTWARE + AI project.
+
+Do not require physical sensors, smart bins, robots, laboratory hardware or IoT hardware.
+
+The system can accept:
+
+1. Laboratory-derived chemical composition
+2. Spectroscopy-derived composition
+3. Material composition
+4. Elemental composition
+5. Process parameters
+6. Historical experimental observations
+7. CSV datasets
+
+For the hackathon MVP, focus primarily on:
+
+MIXED PLASTIC WASTE â†’ PYROLYSIS INTELLIGENCE
+
+Do NOT attempt to build every possible waste-treatment technology.
+
+The architecture should be extensible to organic waste / anaerobic digestion / biogas in the future, but the main implemented pathway should be plastic pyrolysis.
+
+Never claim that a normal RGB photograph can reliably determine detailed elemental composition.
+
+If an image upload feature is included, use it only for:
+- sample/document identification
+- visual waste context
+- UI demonstration
+
+Do not claim:
+â€œCamera â†’ exact C/H/O/N/Cl composition.â€
+
+Chemical composition must come from structured data, CSV, spectroscopy/lab results, or manually entered values.
+
+============================================================
+3. RESEARCH-GROUNDED INPUTS
+============================================================
+
+The system should support variables relevant to waste conversion / pyrolysis modelling, such as:
+
+Material composition:
+- PE %
+- PP %
+- PET %
+- PS %
+- PVC %
+- Other %
+
+Elemental composition:
+- Carbon %
+- Hydrogen %
+- Oxygen %
+- Nitrogen %
+- Chlorine %
+- Other %
+
+Physical/process variables:
+- Moisture %
+- Particle size
+- Feed rate
+- Temperature
+- Residence time
+
+The model architecture must be flexible because different datasets may have different columns.
+
+Do not hardcode fake scientific relationships.
+
+If a dataset does not contain a particular variable, gracefully disable that part of the model instead of inventing data.
+
+============================================================
+4. CORE PRODUCT MODULES
+============================================================
+
+Build the following modules:
+
+A. Landing / Product Overview
+B. Dataset / Waste Sample Upload
+C. Chemical Intelligence
+D. ML Prediction Engine
+E. Treatment Pathway Comparison
+F. Optimization Engine
+G. What-If Simulation Lab
+H. Explainable AI
+I. Carbon Intelligence
+J. Impact Dashboard
+K. Reports
+L. Demo Mode
+M. Model Performance / Trust Center
+
+============================================================
+5. LANDING PAGE
+============================================================
+
+Create a visually impressive but professional environmental-tech landing page.
+
+Headline:
+
+â€œTurn Waste Composition Into Recovery Decisions.â€
+
+Subheadline:
+
+â€œCHEM2ENERGY AI uses chemical and process data to predict conversion outcomes, compare recovery pathways, and simulate better resource-recovery decisions.â€
+
+Do NOT make it look like a generic AI startup landing page.
+
+Visual identity:
+- premium industrial sustainability
+- scientific
+- clean
+- data-rich
+- modern
+- restrained
+- professional
+- not childish
+- not overly colorful
+
+Include an animated visual flow:
+
+Waste Sample
+      â†“
+Chemical Profile
+      â†“
+AI Engine
+      â†“
+Prediction
+      â†“
+Optimization
+      â†“
+Recovery Decision
+
+Add CTA:
+
+â€œAnalyze a Waste Streamâ€
+
+Secondary CTA:
+
+â€œExplore Demoâ€
+
+Add small trust indicators:
+
+AI Prediction
+Chemical Intelligence
+What-if Simulation
+Explainable Decisions
+
+============================================================
+6. GLOBAL APPLICATION SHELL
+============================================================
+
+After entering the application, use a premium dashboard layout.
+
+Sidebar:
+
+CHEM2ENERGY
+
+Overview
+Waste Samples
+Chemical Intelligence
+AI Predictions
+Pathway Optimizer
+What-If Lab
+Carbon Intelligence
+Impact
+Reports
+Model Trust
+
+Bottom:
+
+Demo Mode
+Settings
+
+Top bar:
+
+Current Sample
+Model Status
+Data Quality
+AI Confidence
+
+Use responsive design.
+
+Desktop-first but fully responsive.
+
+Do not create a dashboard that looks like a template copied from a SaaS boilerplate.
+
+============================================================
+7. OVERVIEW DASHBOARD
+============================================================
+
+The overview dashboard should immediately communicate the entire pipeline.
+
+Top:
+
+â€œWaste Recovery Intelligenceâ€
+
+Sample:
+Mixed Plastic Batch #001
+
+Status:
+Analyzed
+
+Then show a horizontal/vertical pipeline:
+
+1. Sample
+2. Composition
+3. AI Analysis
+4. Outcome Prediction
+5. Pathway Comparison
+6. Optimization
+7. Impact
+
+Each stage should be clickable.
+
+When a stage is clicked, visually expand that stage and show details.
+
+Do not use a static flow diagram only.
+
+Make the pipeline interactive.
+
+============================================================
+8. WASTE SAMPLE INGESTION
+============================================================
+
+Build a beautiful upload interface.
+
+Support:
+
+CSV upload
+JSON upload
+Manual entry
+Demo dataset
+
+The user should be able to select:
+
+Waste category:
+- Mixed Plastic
+- Organic
+- Municipal Solid Waste
+- Industrial Waste
+
+For MVP, Mixed Plastic is the primary active pathway.
+
+CSV validation must include:
+
+- missing columns
+- invalid percentages
+- negative values
+- percentages greater than 100
+- duplicate rows
+- missing process variables
+
+Show a DATA QUALITY SCORE.
+
+Example:
+
+Data Quality
+â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–‘â–‘ 87%
+
+Detected:
+âœ“ 14 required variables
+âœ“ 0 invalid values
+âš  2 optional variables missing
+
+Never show NaN, undefined or Infinity.
+
+============================================================
+9. CHEMICAL INTELLIGENCE SCREEN
+============================================================
+
+This should be one of the most visually impressive pages.
+
+Title:
+
+â€œChemical Intelligenceâ€
+
+Show:
+
+Material composition
+
+PE
+PP
+PET
+PS
+PVC
+Other
+
+Use an interactive composition visualization.
+
+When user clicks a material:
+
+Show:
+
+Material fraction
+Contribution to sample
+Relevant model inputs
+Data source
+
+Then show elemental composition:
+
+Carbon
+Hydrogen
+Oxygen
+Nitrogen
+Chlorine
+
+Use clean charts.
+
+Also show:
+
+Moisture
+Particle size
+Feed rate
+Temperature
+Residence time
+
+Use cards and sliders where appropriate.
+
+IMPORTANT:
+
+Do not imply that these values were measured by our system unless they actually came from uploaded data.
+
+Display:
+
+â€œSource: Uploaded datasetâ€
+
+or
+
+â€œSource: Demo datasetâ€
+
+============================================================
+10. AI DATA QUALITY ANALYSIS
+============================================================
+
+Before prediction, run a data-quality stage.
+
+Display an animated process:
+
+Checking schema
+      â†“
+Validating composition
+      â†“
+Checking ranges
+      â†“
+Checking missing values
+      â†“
+Checking model compatibility
+      â†“
+Ready for prediction
+
+Show a quality score.
+
+If insufficient data exists:
+
+Do not silently generate results.
+
+Explain:
+
+â€œPrediction unavailable because the current sample is missing required model inputs.â€
+
+Offer:
+
+â€œUse Demo Datasetâ€
+
+============================================================
+11. ML PREDICTION ENGINE
+============================================================
+
+Build a real ML layer.
+
+Primary prediction target:
+
+Pyrolysis product distribution.
+
+Potential outputs:
+
+Oil %
+Gas %
+Char %
+Other %
+
+If the actual dataset has different output columns, dynamically adapt the UI.
+
+Candidate models:
+
+- Linear Regression baseline
+- Random Forest
+- Gradient Boosting / XGBoost if available
+
+Do not automatically choose a complex model.
+
+Train multiple models where data allows.
+
+Evaluate using appropriate regression metrics:
+
+MAE
+RMSE
+RÂ²
+
+Use cross-validation where dataset size allows.
+
+Show:
+
+Model
+MAE
+RMSE
+RÂ²
+
+The final selected model should be based on validation performance, not arbitrary selection.
+
+============================================================
+12. MODEL TRUST CENTER
+============================================================
+
+Create a â€œModel Trustâ€ page.
+
+Show:
+
+Dataset size
+Train/validation strategy
+Features used
+Target variables
+Model type
+Validation metrics
+Prediction confidence / uncertainty if supported
+
+Show feature importance.
+
+If SHAP is available, use SHAP.
+
+Example UI:
+
+Feature contribution
+
+Temperature
+â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆ
+
+Plastic composition
+â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆ
+
+Carbon content
+â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆ
+
+Residence time
+â–ˆâ–ˆâ–ˆâ–ˆâ–ˆ
+
+Particle size
+â–ˆâ–ˆâ–ˆ
+
+IMPORTANT:
+
+Never hardcode feature importance percentages.
+
+Calculate them from the actual model.
+
+If SHAP is unavailable, use model-native feature importance and label it correctly.
+
+============================================================
+13. PREDICTION SCREEN
+============================================================
+
+Create a dramatic but professional prediction visualization.
+
+Title:
+
+â€œConversion Predictionâ€
+
+Show:
+
+Predicted product distribution.
+
+Example:
+
+Oil
+â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆ  XX%
+
+Gas
+â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆ XX%
+
+Char
+â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆ XX%
+
+Other
+â–ˆâ–ˆ XX%
+
+The values must come from the actual model.
+
+Do not use invented values.
+
+If demo mode is active, clearly label:
+
+â€œDemo prediction â€” illustrative datasetâ€
+
+Also show confidence / uncertainty if the model supports it.
+
+============================================================
+14. PATHWAY COMPARISON ENGINE
+============================================================
+
+This is a core differentiator.
+
+Do not only predict pyrolysis.
+
+Create a conceptual comparison layer for:
+
+1. Mechanical Recycling
+2. Pyrolysis
+3. Energy Recovery
+
+For each pathway calculate only metrics that can be legitimately derived from the available data/model.
+
+Possible metrics:
+
+Material recovery
+Energy potential
+Estimated economic value
+Estimated carbon impact
+
+If a metric cannot be scientifically calculated from the available dataset:
+
+Display:
+
+â€œInsufficient dataâ€
+
+instead of inventing a number.
+
+Each pathway should be shown as an interactive card.
+
+Clicking a pathway opens:
+
+- assumptions
+- available predictions
+- model source
+- data requirements
+- limitations
+
+============================================================
+15. OPTIMIZATION ENGINE
+============================================================
+
+This is the HEART of the product.
+
+The user should select an objective.
+
+Options:
+
+MAXIMIZE ENERGY RECOVERY
+
+MAXIMIZE MATERIAL RECOVERY
+
+MINIMIZE ESTIMATED CARBON IMPACT
+
+MAXIMIZE ECONOMIC VALUE
+
+The optimizer should evaluate feasible configurations based on the available model.
+
+For pyrolysis:
+
+Variables can include:
+
+Temperature
+Residence time
+Particle size
+Feed rate
+
+Do not invent unsafe industrial operating ranges.
+
+Use ranges supported by the dataset.
+
+The optimizer should search only inside the training-data-supported range.
+
+This is extremely important.
+
+Show:
+
+â€œOptimization boundaryâ€
+
+Training data range:
+Temperature: Xâ€“Y
+Residence time: Xâ€“Y
+etc.
+
+Never recommend configurations outside the supported range without clearly labeling them as extrapolation.
+
+============================================================
+16. WHAT-IF SIMULATION LAB
+============================================================
+
+This must be one of the strongest visual parts of the application.
+
+Page title:
+
+â€œWhat-If Labâ€
+
+Subtitle:
+
+â€œExplore how process and composition changes affect predicted outcomes.â€
+
+Create interactive controls:
+
+Temperature
+Residence time
+Particle size
+Feed rate
+
+When the user changes a parameter:
+
+DO NOT instantly jump to the final output.
+
+Show a short visual simulation:
+
+INPUT CHANGED
+      â†“
+MODEL RE-EVALUATING
+      â†“
+PREDICTED OUTPUT UPDATED
+      â†“
+IMPACT UPDATED
+
+Then animate the charts to the new prediction.
+
+Show BEFORE vs AFTER.
+
+Example structure:
+
+Parameter:
+Temperature
+
+Before:
+450Â°C
+
+After:
+500Â°C
+
+Output changes:
+
+Oil:
+Before â†’ After
+
+Gas:
+Before â†’ After
+
+Char:
+Before â†’ After
+
+Only display scientifically valid model outputs.
+
+============================================================
+17. SCENARIO COMPARISON
+============================================================
+
+Allow users to create scenarios.
+
+Scenario A:
+Current configuration
+
+Scenario B:
+Optimized configuration
+
+Scenario C:
+User-defined configuration
+
+Show them side-by-side.
+
+Example:
+
+                    Current     Optimized
+
+Oil                  model       model
+Gas                  model       model
+Char                 model       model
+Energy               derived     derived
+Carbon impact        derived     derived
+
+Do not use fake values.
+
+============================================================
+18. CARBON INTELLIGENCE
+============================================================
+
+Create a dedicated Carbon Intelligence page.
+
+Where supported by the dataset, show:
+
+Biogenic carbon
+Fossil carbon
+Inert carbon
+
+The literature basis for this module is the use of AI/ML with chemical/spectroscopic information to estimate carbon fractions.
+
+Do not pretend the system is performing spectroscopy.
+
+If the uploaded dataset contains carbon fractions:
+
+Visualize them.
+
+If not:
+
+Show:
+
+â€œCarbon fraction unavailable for this sample.â€
+
+Then allow future integration.
+
+Show pathway-level carbon comparisons only if a defensible calculation is available.
+
+Always label:
+
+â€œModel estimateâ€
+
+â€œDerived estimateâ€
+
+or
+
+â€œMeasured valueâ€
+
+appropriately.
+
+============================================================
+19. AI EXPLANATION LAYER
+============================================================
+
+Add an AI explanation assistant.
+
+This is NOT the main prediction model.
+
+The ML model makes predictions.
+
+The LLM explains the prediction and summarizes evidence.
+
+Example:
+
+User:
+
+â€œWhy did the model predict higher oil yield?â€
+
+AI should answer using actual model features:
+
+â€œThe prediction is primarily associated with the input composition and process parameters. The model identified the following features as influential: ...â€
+
+Do not allow the LLM to invent scientific facts.
+
+The explanation must be grounded in:
+
+- actual input values
+- model output
+- model feature importance
+- available documentation
+
+If using RAG, create a knowledge base containing:
+
+- project methodology
+- dataset documentation
+- model documentation
+- relevant research notes
+
+============================================================
+20. AI AGENT
+============================================================
+
+Create an optional â€œChemAI Assistantâ€.
+
+The assistant can answer:
+
+â€œWhat does this sample contain?â€
+
+â€œWhy is pyrolysis being considered?â€
+
+â€œWhat changed when I increased temperature?â€
+
+â€œWhat variables are most influential?â€
+
+â€œWhat data is missing?â€
+
+â€œExplain this model to a non-technical operator.â€
+
+The agent must NEVER override the actual ML model.
+
+Use the LLM as:
+
+INTERPRETATION LAYER
+
+not:
+
+SCIENTIFIC PREDICTION ENGINE.
+
+============================================================
+21. VISUAL PIPELINE
+============================================================
+
+Every important stage must be visually connected.
+
+Use animated transitions between:
+
+Sample
+â†’ Chemical Profile
+â†’ Data Validation
+â†’ ML Model
+â†’ Prediction
+â†’ Pathway Comparison
+â†’ Optimization
+â†’ Simulation
+â†’ Impact
+
+When the user presses:
+
+â€œRun Analysisâ€
+
+show the process sequentially.
+
+Example:
+
+Stage 1:
+â€œIngesting sampleâ€
+
+Stage 2:
+â€œValidating compositionâ€
+
+Stage 3:
+â€œRunning prediction modelâ€
+
+Stage 4:
+â€œComparing pathwaysâ€
+
+Stage 5:
+â€œRunning optimizationâ€
+
+Stage 6:
+â€œGenerating explanationâ€
+
+Stage 7:
+â€œAnalysis completeâ€
+
+Do NOT make the loading animation fake if possible.
+
+Tie each stage to an actual backend/model operation.
+
+============================================================
+22. DEMO MODE
+============================================================
+
+Build a dedicated Demo Mode for judges.
+
+The demo should be executable with one click.
+
+Button:
+
+â€œLaunch Judge Demoâ€
+
+The demo should automatically load a clean sample dataset.
+
+Then guide the user through:
+
+1. Waste sample
+2. Chemical composition
+3. AI analysis
+4. Prediction
+5. Pathway comparison
+6. Optimization
+7. What-if simulation
+8. Explainability
+9. Impact report
+
+But do NOT autoplay everything without user interaction.
+
+The judge should be able to click:
+
+â€œNextâ€
+
+and see the system perform the corresponding stage.
+
+============================================================
+23. JUDGE DEMO SCRIPT
+============================================================
+
+Design the UI specifically around this 3â€“5 minute demo.
+
+Opening:
+
+â€œThis is not a waste classifier.
+
+We are building a decision engine that asks what should happen to a chemically characterized waste stream.â€
+
+Then:
+
+STEP 1
+
+Upload sample.
+
+STEP 2
+
+Show chemical composition.
+
+STEP 3
+
+Run AI analysis.
+
+STEP 4
+
+Show predicted oil/gas/char.
+
+STEP 5
+
+Compare recovery pathways.
+
+STEP 6
+
+Click Optimize.
+
+STEP 7
+
+Open What-If Lab.
+
+Change one parameter.
+
+Show model outputs update.
+
+STEP 8
+
+Open Explainability.
+
+Show why the model changed.
+
+STEP 9
+
+Generate Impact Report.
+
+End with:
+
+â€œCHEM2ENERGY converts waste composition into actionable recovery intelligence.â€
+
+============================================================
+24. REPORT GENERATION
+============================================================
+
+Generate a professional downloadable report.
+
+Report sections:
+
+1. Sample information
+2. Data quality
+3. Chemical composition
+4. Model used
+5. Prediction
+6. Pathway comparison
+7. Optimization scenario
+8. What-if analysis
+9. Carbon information
+10. Limitations
+11. Recommendations
+
+Do not call model estimates â€œmeasured results.â€
+
+============================================================
+25. BACKEND ARCHITECTURE
+============================================================
+
+Use a clean architecture.
+
+Frontend:
+
+React
+TypeScript
+Tailwind CSS
+Recharts or equivalent visualization library
+
+Backend:
+
+Node.js
+Express
+
+ML service:
+
+Python
+FastAPI
+
+Database:
+
+MongoDB or PostgreSQL
+
+Potential architecture:
+
+React
+  â†“
+Node/Express API
+  â†“
+Python ML service
+  â†“
+Model
+  â†“
+Prediction
+  â†“
+Optimization
+
+Database stores:
+
+Users
+Samples
+Composition
+Predictions
+Scenarios
+Model metadata
+Reports
+
+============================================================
+26. API DESIGN
+============================================================
+
+Create clean APIs.
+
+POST /api/samples
+
+POST /api/samples/:id/validate
+
+POST /api/samples/:id/analyze
+
+POST /api/predict
+
+POST /api/optimize
+
+POST /api/simulate
+
+GET /api/models
+
+GET /api/samples/:id
+
+POST /api/reports
+
+POST /api/assistant
+
+Do not put ML logic directly inside frontend code.
+
+============================================================
+27. ML SERVICE
+============================================================
+
+Create a clean Python service.
+
+Suggested structure:
+
+ml/
+    data/
+    preprocessing/
+    models/
+    training/
+    evaluation/
+    inference/
+    explainability/
+    optimization/
+    schemas/
+
+Use:
+
+Pydantic
+Pandas
+NumPy
+Scikit-learn
+
+Optional:
+
+XGBoost
+SHAP
+Optuna
+
+Do not add dependencies unnecessarily.
+
+============================================================
+28. MODEL TRAINING PIPELINE
+============================================================
+
+Create:
+
+1. Data ingestion
+2. Validation
+3. Cleaning
+4. Feature engineering
+5. Train/validation split
+6. Baseline model
+7. Random Forest
+8. Gradient boosting/XGBoost if justified
+9. Cross-validation
+10. Evaluation
+11. Model selection
+12. Explainability
+13. Save model
+14. Inference API
+
+Prevent data leakage.
+
+Do not fit preprocessing on the entire dataset before validation.
+
+Use a proper sklearn Pipeline where appropriate.
+
+============================================================
+29. OPTIMIZATION IMPLEMENTATION
+============================================================
+
+Implement optimization as a separate module.
+
+Possible methods:
+
+- grid search inside valid data ranges
+- Bayesian optimization
+- Optuna
+- constrained optimization
+
+The optimizer must never blindly search arbitrary industrial conditions.
+
+Use:
+
+SUPPORTED RANGE
+
+and clearly show it to the user.
+
+The optimizer should use the trained prediction model as an objective function where appropriate.
+
+============================================================
+30. DATASET REQUIREMENTS
+============================================================
+
+First inspect the actual dataset.
+
+Do not start by fabricating a dataset.
+
+If no dataset is supplied:
+
+Create a small DEMO DATASET ONLY for UI development.
+
+Clearly mark it:
+
+DEMO / ILLUSTRATIVE
+
+Do not present demo values as experimental measurements.
+
+Then provide a clean adapter so the real dataset can replace it later.
+
+Create:
+
+dataset_schema.md
+
+containing:
+
+column
+type
+unit
+description
+required/optional
+source
+valid range if known
+
+============================================================
+31. NO FAKE SCIENCE
+============================================================
+
+This is critical.
+
+Never invent:
+
+- experimental measurements
+- chemical properties
+- model accuracy
+- energy values
+- carbon reductions
+- economic savings
+- emissions reductions
+- scientific citations
+
+If the system does not have enough information:
+
+say:
+
+â€œInsufficient data.â€
+
+If a value is estimated:
+
+say:
+
+â€œModel estimate.â€
+
+If illustrative:
+
+say:
+
+â€œIllustrative demo value.â€
+
+If measured:
+
+say:
+
+â€œMeasured value.â€
+
+This is an environmental/scientific product and credibility is more important than flashy numbers.
+
+============================================================
+32. UI DESIGN
+============================================================
+
+The UI should feel like:
+
+Industrial AI
++
+Scientific dashboard
++
+Sustainability intelligence
+
+NOT:
+
+A generic admin dashboard.
+
+Use:
+
+- large data visualizations
+- clean cards
+- clear hierarchy
+- subtle motion
+- interactive charts
+- pipeline visualization
+- before/after comparisons
+- model confidence indicators
+- meaningful micro-interactions
+
+Avoid:
+
+- excessive gradients
+- giant meaningless animations
+- random 3D graphics
+- fake AI glowing effects
+- unnecessary glassmorphism
+- excessive rounded cards
+
+The UI should look credible to:
+
+AWS engineers
+ML engineers
+environmental researchers
+hackathon judges
+industry operators
+
+============================================================
+33. DYNAMIC UI REQUIREMENTS
+============================================================
+
+The UI must react to actual state.
+
+Examples:
+
+If no sample:
+Show:
+
+â€œUpload a sample to begin.â€
+
+If sample uploaded:
+Enable:
+
+â€œValidateâ€
+
+If validation passes:
+Enable:
+
+â€œRun AI Analysisâ€
+
+If analysis complete:
+Enable:
+
+â€œCompare Pathwaysâ€
+
+If optimization complete:
+Enable:
+
+â€œOpen What-If Labâ€
+
+Do not show every result from the beginning.
+
+The user should feel that the application is performing an actual workflow.
+
+============================================================
+34. ANIMATION REQUIREMENTS
+============================================================
+
+Use animation purposefully.
+
+Good animations:
+
+- pipeline progression
+- chart transitions
+- model status
+- before/after changes
+- optimization search
+- scenario comparison
+- number count-up for final metrics
+
+Avoid constant movement.
+
+Support:
+
+prefers-reduced-motion
+
+============================================================
+35. ERROR HANDLING
+============================================================
+
+Every API call must have:
+
+Loading state
+Success state
+Error state
+Retry option
+
+Example:
+
+â€œPrediction unavailable.â€
+
+Reason:
+
+â€œRequired feature â€˜chlorineâ€™ is missing from this sample.â€
+
+Then offer:
+
+â€œUse supported datasetâ€
+
+or
+
+â€œEdit sampleâ€
+
+Never crash the UI.
+
+============================================================
+36. SECURITY
+============================================================
+
+Do not expose API keys in frontend.
+
+Use:
+
+.env
+
+for secrets.
+
+Create:
+
+.env.example
+
+Never commit:
+
+API keys
+database passwords
+private credentials
+
+============================================================
+37. AWS INTEGRATION
+============================================================
+
+The hackathon permits AWS deployment / eligible AWS open-source tooling.
+
+Use AWS meaningfully rather than adding AWS logos only.
+
+Possible architecture:
+
+Frontend:
+AWS Amplify / S3 + CloudFront
+
+Backend:
+AWS App Runner / ECS / EC2
+
+ML API:
+AWS App Runner or ECS
+
+Storage:
+S3
+
+Database:
+MongoDB Atlas or AWS-compatible database
+
+Search/RAG:
+OpenSearch if appropriate
+
+Monitoring:
+CloudWatch
+
+The final implementation should use only services that are practical within the hackathon environment.
+
+Create:
+
+ARCHITECTURE.md
+
+with a diagram:
+
+User
+ â†“
+CloudFront
+ â†“
+Frontend
+ â†“
+API
+ â†“
+Backend
+ â†“
+ML Service
+ â†“
+Model
+
+and supporting services.
+
+============================================================
+38. OPEN-SOURCE / REPRODUCIBILITY
+============================================================
+
+Everything necessary to reproduce the project should be documented.
+
+Create:
+
+README.md
+ARCHITECTURE.md
+DATASET.md
+MODEL_CARD.md
+LIMITATIONS.md
+API.md
+DEPLOYMENT.md
+DEMO_SCRIPT.md
+
+============================================================
+39. MODEL CARD
+============================================================
+
+Create a model card.
+
+Include:
+
+Model purpose
+Training data
+Features
+Targets
+Evaluation method
+Metrics
+Known limitations
+Out-of-distribution behavior
+Intended use
+Non-intended use
+
+This will make the project feel much more serious.
+
+============================================================
+40. LIMITATIONS
+============================================================
+
+Create a visible â€œLimitationsâ€ section.
+
+Mention:
+
+- Model quality depends on training data.
+- Predictions are not laboratory measurements.
+- Extrapolation outside training distribution is risky.
+- Chemical composition must come from reliable input data.
+- Economic estimates depend on external prices.
+- Carbon estimates depend on methodology and available data.
+- The platform is a decision-support system, not a replacement for industrial engineering or laboratory validation.
+
+Do not hide limitations.
+
+============================================================
+41. ACCESSIBILITY
+============================================================
+
+Use:
+
+semantic HTML
+keyboard navigation
+visible focus
+ARIA labels where needed
+high contrast
+responsive design
+
+All charts should have textual summaries.
+
+Do not rely only on color to communicate status.
+
+============================================================
+42. RESPONSIVE DESIGN
+============================================================
+
+Desktop:
+Full dashboard experience.
+
+Tablet:
+Collapsible sidebar.
+
+Mobile:
+Stack cards and charts.
+
+Do not create horizontal page overflow.
+
+Tables should become horizontally scrollable locally when necessary.
+
+============================================================
+43. VISUALIZATION REQUIREMENTS
+============================================================
+
+Use different visualization types appropriately.
+
+Chemical composition:
+Donut/bar
+
+Elemental composition:
+Bar
+
+Prediction:
+Bar / stacked composition
+
+Model performance:
+Bar
+
+Feature importance:
+Horizontal bar
+
+Scenario comparison:
+Grouped bars
+
+What-if:
+Line chart or animated comparison
+
+Pipeline:
+Interactive SVG
+
+Do not use charts merely for decoration.
+
+============================================================
+44. IMPACT DASHBOARD
+============================================================
+
+Create an â€œImpactâ€ screen.
+
+Possible metrics:
+
+Material recovery
+Energy potential
+Carbon estimate
+Waste diverted
+
+Only show metrics that can be derived from the actual available data/model.
+
+Use a clear distinction:
+
+Measured
+Predicted
+Derived
+Illustrative
+
+At the top display:
+
+â€œImpact calculations are model-derived estimates.â€
+
+============================================================
+45. FINAL DECISION CARD
+============================================================
+
+At the end of the workflow, create a premium final decision card.
+
+Example structure:
+
+CHEM2ENERGY DECISION
+
+Sample:
+Mixed Plastic Batch #001
+
+Model status:
+Validated
+
+Recommended pathway:
+[Pathway based on optimization objective]
+
+Primary evidence:
+1. ...
+2. ...
+3. ...
+
+Prediction:
+...
+
+Confidence:
+...
+
+Optimization objective:
+...
+
+Data limitations:
+...
+
+Buttons:
+
+View Evidence
+Run What-If
+Generate Report
+
+Do NOT display a recommendation if the model cannot justify it.
+
+============================================================
+46. DEMO DATA
+============================================================
+
+Create a clean sample dataset only if no real dataset is available.
+
+It should be clearly labelled:
+
+â€œHackathon Demo Dataset â€” Illustrativeâ€
+
+Use plausible ranges but do not call them real experimental values.
+
+Create at least:
+
+Sample A:
+Mixed plastic
+
+Sample B:
+High PE/PP
+
+Sample C:
+Higher PET/PVC
+
+Use these to demonstrate different model behavior only if the model supports it.
+
+Do not manually hardcode different outputs for each sample.
+
+The outputs must come from the same prediction pipeline.
+
+============================================================
+47. DEMO EXPERIENCE
+============================================================
+
+Build a special â€œJudge Modeâ€.
+
+At the top:
+
+JUDGE MODE
+
+Progress:
+
+01 Sample
+02 Composition
+03 AI
+04 Prediction
+05 Optimize
+06 Simulate
+07 Explain
+08 Impact
+
+Each stage has:
+
+Status
+Data
+Visualization
+Next action
+
+The judge should always understand:
+
+Where am I?
+What did AI just do?
+What changed?
+Why does it matter?
+
+============================================================
+48. HACKATHON STORY
+============================================================
+
+The product story should be:
+
+Problem:
+
+Waste streams are heterogeneous.
+
+Knowing that something is â€œplastic wasteâ€ is not enough to determine the best recovery strategy.
+
+Solution:
+
+Use chemical/material composition and process data to predict conversion outcomes.
+
+Innovation:
+
+Move from classification to decision intelligence.
+
+AI:
+
+ML predicts outcomes.
+
+Optimization:
+
+Finds feasible configurations based on the selected objective.
+
+GenAI:
+
+Explains model behavior and summarizes evidence.
+
+Simulation:
+
+Allows users to test â€œwhat-ifâ€ scenarios before changing real-world processes.
+
+Impact:
+
+Connects waste composition to resource and energy recovery decisions.
+
+============================================================
+49. ONE-LINE DIFFERENTIATOR
+============================================================
+
+The entire product should communicate:
+
+â€œWe don't just identify what the waste is.
+
+We predict what can happen to it â€” and help evaluate what should happen next.â€
+
+============================================================
+50. IMPLEMENTATION ORDER
+============================================================
+
+DO NOT build everything at once.
+
+Implement in this order:
+
+PHASE 1
+Project setup
+Frontend
+Backend
+ML service
+Database
+
+PHASE 2
+Dataset schema
+CSV upload
+Validation
+
+PHASE 3
+ML baseline
+Random Forest
+Evaluation
+Inference API
+
+PHASE 4
+Prediction dashboard
+
+PHASE 5
+Chemical Intelligence
+
+PHASE 6
+Pathway comparison
+
+PHASE 7
+Optimization
+
+PHASE 8
+What-If Lab
+
+PHASE 9
+Explainability
+
+PHASE 10
+Carbon Intelligence
+
+PHASE 11
+Reports
+
+PHASE 12
+Judge Mode
+
+PHASE 13
+AWS deployment
+
+PHASE 14
+UI polish
+
+============================================================
+51. DEVELOPMENT RULE
+============================================================
+
+Do not create fake frontend screens disconnected from backend functionality.
+
+Every major UI result should eventually connect to a real data/model state.
+
+During early development, use clearly labelled mock/demo data.
+
+Then replace mock outputs with real API results.
+
+Keep all business logic out of UI components.
+
+Use reusable components.
+
+============================================================
+52. CODE QUALITY
+============================================================
+
+Use:
+
+TypeScript
+strict typing
+clean component architecture
+API validation
+error boundaries
+environment variables
+logging
+modular ML code
+unit tests where useful
+
+Avoid:
+
+giant files
+hardcoded data
+duplicated components
+magic numbers
+fake API calls
+unused dependencies
+
+============================================================
+53. FINAL UX TEST
+============================================================
+
+Before considering the project complete, run this exact flow:
+
+1. Open application.
+2. Enter Demo Mode.
+3. Load sample.
+4. Validate.
+5. Run analysis.
+6. Inspect chemical profile.
+7. View prediction.
+8. Compare pathways.
+9. Select objective.
+10. Run optimization.
+11. Open What-If Lab.
+12. Change parameter.
+13. Observe updated prediction.
+14. Open explainability.
+15. Generate report.
+16. Return to dashboard.
+
+No broken states.
+
+No NaN.
+
+No blank charts.
+
+No fake loading forever.
+
+No dead buttons.
+
+No console errors.
+
+============================================================
+54. FINAL PRESENTATION QUALITY
+============================================================
+
+The final product should look good enough to be shown to:
+
+AWS engineers
+ML engineers
+startup founders
+environmental researchers
+hackathon judges
+
+The product must feel like a real prototype of an industrial AI system, not a college CRUD project.
+
+============================================================
+55. MOST IMPORTANT PRODUCT PRINCIPLE
+============================================================
+
+Do not optimize for number of features.
+
+Optimize for:
+
+CLARITY
+SCIENTIFIC CREDIBILITY
+AI DEPTH
+INTERACTIVITY
+EXPLAINABILITY
+DEMO QUALITY
+
+The strongest demo is:
+
+UPLOAD
+â†’ ANALYZE
+â†’ PREDICT
+â†’ COMPARE
+â†’ OPTIMIZE
+â†’ CHANGE A PARAMETER
+â†’ SEE THE MODEL UPDATE
+â†’ UNDERSTAND WHY
+â†’ GENERATE REPORT
+
+============================================================
+56. FINAL DELIVERABLES
+============================================================
+
+Produce:
+
+1. Complete source code
+2. Frontend
+3. Backend
+4. ML service
+5. Database schema
+6. Dataset schema
+7. Training pipeline
+8. Evaluation notebook/script
+9. Inference API
+10. Optimization module
+11. What-if simulation
+12. Explainability
+13. AI assistant
+14. Report generation
+15. Demo mode
+16. README
+17. Architecture diagram
+18. Model card
+19. Limitations document
+20. Deployment guide
+21. .env.example
+22. API documentation
+23. Judge demo script
+
+============================================================
+57. FINAL QUALITY BAR
+============================================================
+
+Before saying the project is complete, ask yourself:
+
+Does this look like a generic dashboard?
+
+If yes â†’ redesign it.
+
+Is the AI actually connected to a real ML pipeline?
+
+If no â†’ fix it.
+
+Are the numbers fabricated?
+
+If yes â†’ remove them.
+
+Can the judge understand the concept in 30 seconds?
+
+If no â†’ improve the landing/demo flow.
+
+Can the judge interact with the model?
+
+If no â†’ improve the What-If Lab.
+
+Can the system explain why it produced an output?
+
+If no â†’ improve explainability.
+
+Does the project clearly connect waste â†’ energy/resource recovery?
+
+If no â†’ fix the product narrative.
+
+Does every major visualization represent meaningful information?
+
+If no â†’ remove unnecessary charts.
+
+Does the system clearly distinguish measured, predicted, derived and illustrative values?
+
+If no â†’ fix the UI.
+
+============================================================
+FINAL INSTRUCTION
+============================================================
+
+Build CHEM2ENERGY AI as a scientifically responsible, visually exceptional, interactive AI decision-support platform.
+
+Do not make it a generic waste-management app.
+
+Do not make it a generic chatbot.
+
+Do not make it a static ML dashboard.
+
+Make it feel like:
+
+â€œAn AI control room for understanding chemically characterized waste and exploring resource-recovery decisions.â€
+
+The core experience must be:
+
+CHEMISTRY
+â†’ INTELLIGENCE
+â†’ PREDICTION
+â†’ OPTIMIZATION
+â†’ SIMULATION
+â†’ EXPLANATION
+â†’ IMPACT
+
+Start by inspecting the available dataset/project files and existing code.
+
+Do not invent missing data.
+
+First produce:
+1. repository analysis
+2. proposed architecture
+3. dataset schema
+4. ML problem definition
+5. implementation plan
+
+Then implement phase by phase.
+
+Do not skip directly to a fake UI.

@@ -1,0 +1,20 @@
+﻿Before writing substantial code, inspect the entire repository and all available datasets.
+
+Do not assume column names, target variables, model outputs, scientific ranges, or existing architecture.
+
+First tell me:
+
+1. What files exist?
+2. What dataset exists?
+3. What are the exact columns?
+4. Which variables can actually be used for ML?
+5. What target variables are available?
+6. What is missing?
+7. What can be scientifically implemented from the available data?
+8. What should remain a future/placeholder module?
+
+Then propose the exact MVP architecture.
+
+Do not fabricate any scientific data to fill missing gaps.
+
+Wait for my confirmation before making major architectural changes.

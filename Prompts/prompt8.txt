@@ -1,0 +1,13 @@
+﻿# TASK: LOAD AVATURN 3D AVATAR IN SAATHI PANEL
+
+The user has downloaded the customized 3D avatar and saved it to `public/models/saathi.glb`.
+
+1. In the Saathi 3D Canvas component (e.g. `SaathiAvatar.tsx` / `AvatarController.tsx`):
+   - Remove the fallback geometric meshes (curved shapes/cones).
+   - Use `@react-three/drei`'s `useGLTF('/models/saathi.glb')` to load the new model.
+2. Set camera position and target to frame the upper torso and face cleanly:
+   - Position: `[0, 1.45, 0.75]`
+   - Target / LookAt: `[0, 1.42, 0]`
+   - FOV: `35`
+3. Map speech audio analyser output to mouth morph targets (`mouthOpen`, `jawOpen`, or ARKit visemes present on the Avaturn mesh) so the mouth animates during `isSpeaking`.
+4. Add idle head breathing and gentle eye blinks.

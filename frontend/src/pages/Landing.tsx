@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { AnimatedBackground } from "../components/layout/AnimatedBackground";
 
 const FLOW = [
   ["01", "Waste sample", "Composition and process inputs"],
@@ -20,7 +21,9 @@ export function Landing() {
   }, [reduced]);
 
   return (
-    <div className="min-h-screen bg-paper text-ink">
+    <div className="relative min-h-screen bg-paper text-ink">
+      <AnimatedBackground />
+      <div className="relative z-10">
       <header className="flex items-center justify-between border-b border-line px-5 py-4 md:px-10">
         <div>
           <p className="font-serif text-lg">CHEM2ENERGY <span className="text-muted">AI</span></p>
@@ -95,6 +98,7 @@ export function Landing() {
           </p>
         </article>
       </section>
+      </div>
     </div>
   );
 }

@@ -1,0 +1,772 @@
+﻿============================================================
+58. SAATHI â€” MULTILINGUAL TALKING AI AVATAR
+============================================================
+
+Add a central AI assistant named:
+
+SAATHI
+
+Meaning:
+A digital companion that helps users understand waste, chemical composition,
+AI predictions, optimization results, carbon impact and the entire
+CHEM2ENERGY workflow.
+
+Saathi must not be a decorative chatbot.
+
+Saathi is the conversational interface to the entire application.
+
+------------------------------------------------------------
+SAATHI'S CORE CAPABILITIES
+------------------------------------------------------------
+
+Saathi must have access to the application's current state and authorized
+knowledge base.
+
+Saathi should understand:
+
+- Current waste sample
+- Chemical composition
+- Material composition
+- Elemental composition
+- Data quality
+- Model being used
+- Model metrics
+- Current prediction
+- Pathway comparison
+- Optimization objective
+- Optimization result
+- What-if simulation state
+- Feature importance
+- SHAP explanations where available
+- Carbon information
+- Impact calculations
+- Dataset documentation
+- Model limitations
+- Project methodology
+- Reports
+- Application navigation
+
+Saathi must NOT invent information that does not exist in the application.
+
+If information is unavailable, Saathi should say:
+
+â€œI don't have enough data to answer that from the current sample.â€
+
+------------------------------------------------------------
+MULTILINGUAL CONVERSATION
+------------------------------------------------------------
+
+Saathi must support:
+
+1. English
+2. Hindi
+3. Hinglish
+
+The user should be able to switch language manually.
+
+Controls:
+
+[ English ]
+[ à¤¹à¤¿à¤‚à¤¦à¥€ ]
+[ Hinglish ]
+
+Also support automatic language detection.
+
+Examples:
+
+English:
+â€œWhat does the model predict for this sample?â€
+
+Hindi:
+â€œIs sample ke baare mein model kya predict kar raha hai?â€
+
+Hinglish:
+â€œBhai, is waste ko pyrolysis mein daalne ka reason kya hai?â€
+
+Saathi should answer naturally in the same language style.
+
+Do not translate technical terms unnecessarily.
+
+For example, in Hinglish:
+
+â€œModel ke according carbon content aur material composition
+prediction mein major contributing factors hain.â€
+
+This is preferable to awkward literal translation.
+
+------------------------------------------------------------
+VOICE CONVERSATION
+------------------------------------------------------------
+
+Saathi must support:
+
+User speaks
+    â†“
+Speech-to-Text
+    â†“
+Intent / Context Understanding
+    â†“
+Application Data Retrieval
+    â†“
+LLM Response
+    â†“
+Text-to-Speech
+    â†“
+Talking Avatar
+
+Support microphone interaction:
+
+[ ðŸŽ™ Talk to Saathi ]
+
+When listening:
+
+â€œSaathi is listeningâ€¦â€
+
+When processing:
+
+â€œSaathi is thinkingâ€¦â€
+
+When speaking:
+
+â€œSaathi is speakingâ€¦â€
+
+Provide:
+
+Mute
+Stop speaking
+Replay
+Text fallback
+
+Never make voice the only way to interact.
+
+------------------------------------------------------------
+TALKING AVATAR
+------------------------------------------------------------
+
+Create a professional human-like AI avatar named Saathi.
+
+Saathi should visually communicate:
+
+- intelligence
+- trust
+- approachability
+- environmental technology
+- Indian context
+- professionalism
+
+Avoid cartoonish appearance.
+
+The avatar should have visible states:
+
+IDLE
+LISTENING
+THINKING
+SPEAKING
+ERROR
+
+Use subtle animation.
+
+When Saathi speaks:
+
+- avatar mouth/lip movement should be synchronized with speech
+- subtle head movement
+- natural blinking
+- small visual status indicator
+
+Do not over-animate.
+
+------------------------------------------------------------
+SAATHI POSITION IN THE UI
+------------------------------------------------------------
+
+Saathi should be accessible globally.
+
+Desktop:
+
+Place Saathi as a floating assistant panel on the right side.
+
+Mobile:
+
+Use a bottom-sheet assistant.
+
+Persistent button:
+
+â€œTalk to Saathiâ€
+
+When opened:
+
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚ SAATHI                     â— LIVEâ”‚
+â”‚                                 â”‚
+â”‚        [ AVATAR ]               â”‚
+â”‚                                 â”‚
+â”‚ â€œNamaste! Main Saathi hoon.     â”‚
+â”‚  Aapke waste sample ko          â”‚
+â”‚  samajhne mein help karun?â€     â”‚
+â”‚                                 â”‚
+â”‚ â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ â”‚
+â”‚                                 â”‚
+â”‚ ðŸŽ™ Talk                         â”‚
+â”‚ Type a question...          âž¤   â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+
+------------------------------------------------------------
+CONTEXT-AWARE SAATHI
+------------------------------------------------------------
+
+Saathi must know where the user currently is in the application.
+
+For example:
+
+If user is on Chemical Intelligence:
+
+Saathi proactively understands:
+â€œThe user is inspecting chemical composition.â€
+
+If user is on What-If Lab:
+
+Saathi understands:
+â€œThe user is modifying process parameters.â€
+
+If user is on Model Trust:
+
+Saathi understands:
+â€œThe user is investigating model reliability.â€
+
+The current application state must be passed to Saathi as structured context.
+
+Example:
+
+{
+  currentPage: "what_if_lab",
+  sampleId: "...",
+  temperature: 450,
+  residenceTime: 30,
+  predictedOil: "...",
+  predictedGas: "...",
+  predictedChar: "...",
+  optimizationObjective: "energy"
+}
+
+Do not send unnecessary private information.
+
+------------------------------------------------------------
+SAATHI ACTIONS
+------------------------------------------------------------
+
+Saathi should not only answer questions.
+
+It should be able to guide the user through the application.
+
+Examples:
+
+User:
+â€œSaathi, analyze this sample.â€
+
+Saathi:
+â€œI'll start the analysis.â€
+
+Then trigger:
+
+validateSample()
+analyzeSample()
+
+User:
+â€œShow me why pyrolysis was considered.â€
+
+Saathi:
+Navigate to pathway comparison and open the explanation panel.
+
+User:
+â€œCompare this with the current configuration.â€
+
+Saathi:
+Open scenario comparison.
+
+User:
+â€œWhat happens if I increase the temperature?â€
+
+Saathi:
+Open What-If Lab and explain the available parameter range.
+
+IMPORTANT:
+
+Saathi must only perform actions explicitly supported by the application.
+
+Never invent an action API.
+
+------------------------------------------------------------
+SAATHI KNOWLEDGE ARCHITECTURE
+------------------------------------------------------------
+
+Do NOT simply place the entire website text into the LLM prompt.
+
+Build a structured context/retrieval layer.
+
+Knowledge sources:
+
+1. Application state
+2. Current sample
+3. Model metadata
+4. Prediction results
+5. Optimization results
+6. Dataset documentation
+7. Model card
+8. Project documentation
+9. Scientific reference documents available to the project
+
+Use retrieval/RAG where appropriate.
+
+Prioritize current application state over generic knowledge.
+
+Response hierarchy:
+
+CURRENT APPLICATION DATA
+        â†“
+MODEL METADATA
+        â†“
+PROJECT KNOWLEDGE BASE
+        â†“
+GENERAL KNOWLEDGE
+
+If there is a conflict:
+
+current verified application data takes priority.
+
+------------------------------------------------------------
+SAATHI SCIENTIFIC SAFETY
+------------------------------------------------------------
+
+Saathi must clearly distinguish:
+
+Measured value
+Predicted value
+Derived estimate
+Illustrative demo value
+
+Example:
+
+â€œThis is a model prediction, not a laboratory measurement.â€
+
+Saathi must never claim:
+
+â€œI chemically analyzed the waste myself.â€
+
+Instead:
+
+â€œThe uploaded chemical profile indicatesâ€¦â€
+
+Saathi must never invent:
+
+- chemical measurements
+- experimental results
+- emissions reductions
+- energy production
+- economic savings
+- model accuracy
+- scientific citations
+
+If the system lacks sufficient evidence:
+
+â€œI don't have enough information to determine that.â€
+
+------------------------------------------------------------
+EXPLAINING AI RESULTS
+------------------------------------------------------------
+
+Saathi should translate technical outputs into human language.
+
+Example:
+
+Technical:
+
+SHAP:
+Carbon = +0.21
+Temperature = +0.17
+PE = +0.12
+
+Saathi:
+
+â€œThe model is mainly responding to the carbon content, temperature
+and PE fraction in this sample. These are the strongest contributors
+to the current prediction.â€
+
+If the user asks:
+
+â€œExplain like I'm not an ML person.â€
+
+Saathi should respond simply.
+
+If user asks:
+
+â€œGive me the technical explanation.â€
+
+Saathi can explain:
+
+feature importance
+model behavior
+validation
+uncertainty
+limitations
+
+------------------------------------------------------------
+LANGUAGE EXAMPLES
+------------------------------------------------------------
+
+English:
+
+â€œBased on the current model, the sample's predicted product
+distribution changes when the process temperature changes.â€
+
+Hindi:
+
+â€œCurrent model ke hisaab se temperature change karne par
+predicted product distribution bhi change hota hai.â€
+
+Hinglish:
+
+â€œIs sample mein temperature aur composition prediction ke
+important factors hain. Agar temperature change karoge,
+What-If Lab mein predicted output bhi update hoga.â€
+
+Saathi should sound natural rather than mechanically translated.
+
+------------------------------------------------------------
+VOICE PIPELINE
+------------------------------------------------------------
+
+Recommended architecture:
+
+Microphone
+    â†“
+Speech-to-Text
+    â†“
+Language Detection
+    â†“
+Intent Detection
+    â†“
+Context Retrieval
+    â†“
+Application State
+    â†“
+LLM
+    â†“
+Response
+    â†“
+Text-to-Speech
+    â†“
+Avatar Animation
+
+Use modular provider interfaces so speech providers can be replaced.
+
+Create:
+
+SpeechToTextProvider
+TextToSpeechProvider
+AvatarProvider
+LLMProvider
+
+Do not tightly couple the application to one vendor.
+
+------------------------------------------------------------
+VOICE PROVIDER FALLBACK
+------------------------------------------------------------
+
+If voice service is unavailable:
+
+Saathi should continue working as a text assistant.
+
+Display:
+
+â€œVoice service unavailable. You can continue chatting with Saathi.â€
+
+Never crash the application.
+
+------------------------------------------------------------
+SAATHI UI STATES
+------------------------------------------------------------
+
+Idle:
+
+â€œAsk Saathi anything about this analysis.â€
+
+Listening:
+
+â€œI'm listeningâ€¦â€
+
+Thinking:
+
+â€œI'm analyzing the current dataâ€¦â€
+
+Speaking:
+
+Saathi avatar animates.
+
+Error:
+
+â€œI couldn't complete that request. You can try again or use text.â€
+
+------------------------------------------------------------
+QUICK ACTIONS
+------------------------------------------------------------
+
+Below the avatar show context-aware suggested questions.
+
+On Chemical Intelligence:
+
+â€œExplain this compositionâ€
+â€œWhat does PVC mean here?â€
+â€œWhich inputs matter most?â€
+
+On Prediction:
+
+â€œExplain this predictionâ€
+â€œWhat affects oil yield?â€
+â€œHow confident is the model?â€
+
+On Optimization:
+
+â€œWhy this objective?â€
+â€œShow alternativesâ€
+â€œWhat assumptions are being used?â€
+
+On What-If Lab:
+
+â€œWhat changed?â€
+â€œCompare before and afterâ€
+â€œExplain this parameterâ€
+
+On Impact:
+
+â€œHow was this estimate calculated?â€
+â€œWhat is measured vs predicted?â€
+
+------------------------------------------------------------
+SAATHI PERSONALITY
+------------------------------------------------------------
+
+Saathi should be:
+
+Calm
+Helpful
+Professional
+Clear
+Technically knowledgeable
+Friendly
+Non-judgmental
+
+Do not make Saathi overly enthusiastic.
+
+Avoid phrases like:
+
+â€œWow!!! Amazing!!! ðŸ”¥ðŸ”¥ðŸ”¥â€
+
+Prefer:
+
+â€œHere is what the model is showing.â€
+
+In Hinglish:
+
+â€œChaliye isko step-by-step dekhte hain.â€
+
+------------------------------------------------------------
+SAATHI SHOULD TEACH, NOT JUST ANSWER
+------------------------------------------------------------
+
+When the user asks a technical question, Saathi should explain:
+
+WHY
+WHAT
+HOW
+LIMITATIONS
+
+Example:
+
+User:
+â€œWhy are you using pyrolysis?â€
+
+Saathi:
+
+â€œPyrolysis is being evaluated here because the current sample
+contains the material characteristics required by the model.
+However, this is a model-based evaluation, not a guarantee
+that industrial pyrolysis is the appropriate real-world treatment.â€
+
+------------------------------------------------------------
+SAATHI + DEMO MODE
+------------------------------------------------------------
+
+Saathi should become part of the judge demo.
+
+Opening:
+
+â€œNamaste. Main Saathi hoon.
+
+Main aapko CHEM2ENERGY ke through waste composition se
+recovery decisions tak ka complete process samjha sakta hoon.â€
+
+Then the judge can say:
+
+â€œSaathi, analyze this sample.â€
+
+Saathi triggers the workflow.
+
+After prediction:
+
+â€œAbhi model ne product distribution predict kiya hai.
+Aap chahein toh main explain kar sakta hoon ki prediction
+mein kaunse inputs sabse influential rahe.â€
+
+Judge:
+
+â€œShow me what happens if temperature changes.â€
+
+Saathi opens What-If Lab.
+
+After simulation:
+
+â€œTemperature change ke baad model prediction update hua hai.
+Main before aur after comparison dikha raha hoon.â€
+
+This should feel like a real AI operator interface.
+
+------------------------------------------------------------
+SAATHI DEMO KILLER MOMENT
+------------------------------------------------------------
+
+During the final presentation:
+
+1. Upload sample.
+2. Ask Saathi in Hinglish:
+
+â€œSaathi, is waste ka analysis karke batao kya ho raha hai.â€
+
+3. Saathi speaks Hinglish.
+
+4. Analysis begins.
+
+5. Prediction appears.
+
+6. Ask:
+
+â€œWhy is pyrolysis being considered?â€
+
+7. Saathi explains based on actual model inputs.
+
+8. Ask:
+
+â€œAgar temperature badha dein toh kya hoga?â€
+
+9. Saathi opens What-If Lab.
+
+10. Change temperature.
+
+11. Model prediction updates.
+
+12. Saathi explains the change.
+
+This interaction should be the emotional and technical centerpiece of the demo.
+
+------------------------------------------------------------
+TECHNICAL REQUIREMENT
+------------------------------------------------------------
+
+Create a separate Saathi service/module:
+
+saathi/
+    context/
+    retrieval/
+    prompts/
+    tools/
+    speech/
+    avatar/
+    actions/
+    providers/
+    schemas/
+
+Define structured tools such as:
+
+getCurrentSample()
+getChemicalProfile()
+getPrediction()
+getModelMetrics()
+getFeatureImportance()
+getPathwayComparison()
+getOptimizationResult()
+getSimulationResult()
+getCarbonProfile()
+navigateTo(page)
+openWhatIfLab()
+runAnalysis()
+
+The LLM should call these tools instead of hallucinating application data.
+
+------------------------------------------------------------
+SAATHI TOOL SECURITY
+------------------------------------------------------------
+
+The LLM must NOT have arbitrary backend access.
+
+Only expose explicitly defined tools.
+
+Validate every tool call.
+
+Read operations should be preferred.
+
+Write/action operations must require explicit user intent where appropriate.
+
+Do not allow Saathi to modify scientific data silently.
+
+------------------------------------------------------------
+SAATHI MEMORY
+------------------------------------------------------------
+
+Within a session, Saathi can remember:
+
+current sample
+current scenario
+current language
+current page
+recent questions
+
+Do not create permanent personal memory unless explicitly required.
+
+------------------------------------------------------------
+FINAL EXPERIENCE
+------------------------------------------------------------
+
+CHEM2ENERGY should feel like:
+
+USER
+  â†“
+SAATHI
+  â†“
+CHEMICAL DATA
+  â†“
+AI MODEL
+  â†“
+PREDICTION
+  â†“
+OPTIMIZATION
+  â†“
+SIMULATION
+  â†“
+EXPLANATION
+  â†“
+DECISION SUPPORT
+
+Saathi is the human-friendly layer connecting the complex AI system
+to the user.
+
+The user should never feel like they are interacting with several
+disconnected ML models.
+
+They should feel like they have one intelligent environmental
+AI companion:
+
+SAATHI.
+
+Final product message:
+
+â€œCHEM2ENERGY understands the data.
+Saathi helps you understand the decision.â€

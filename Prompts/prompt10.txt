@@ -1,0 +1,166 @@
+﻿# MASTER SCIENTIFIC ARCHITECTURE SPEC: INDUSTRIAL WASTE RECOVERY, THERMODYNAMICS, AND DECISION-SUPPORT ENGINE
+
+You are the Principal Chemical Process Architect and Lead Full-Stack Engineer on the CHEM2ENERGY AI platform.
+
+### CORE MANDATE: ZERO FAKE SCIENCE
+All calculations, indicators, and mitigation outputs must be deterministically grounded in chemical stoichiometry, thermodynamics, mass balances, and the trained surrogate models. Never hardcode random mock percentages or synthetic outputs. All energy, emission, and mass quantities must balance.
+
+---
+
+### ARCHITECTURAL MODULES TO IMPLEMENT
+
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+              â”‚          Raw Feedstock Composition           â”‚
+              â”‚        (PE, PP, PS, PVC, PET, Ash, H2O)      â”‚
+              â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+                                     â”‚
+             â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”´â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+             â–¼                                               â–¼
+[MODULE 1: CONTAMINATION & ACID GAS]            [MODULE 2: ELEMENTAL & THERMO]
+
+PVC Dehydrochlorination (HCl calc)            - Dulong/Boie HHV Computation
+
+Sorbent Bed Sizing (Ca(OH)2 / CaO)            - Parasitic Sensible/Endothermic Heat
+
+PET Terephthalic/Benzoic Risk                 - Syngas Thermal Autarky Ratio (NER)
+â”‚                                               â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+â–¼
+[MODULE 3: ML SURROGATE INFERENCE (Belden et al. Benchmark)]
+
+Temperature & Kinetic Inputs -> [Oil %, Gas %, Char %]
+â”‚
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”´â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â–¼                                               â–¼
+[MODULE 4: OIL UPGRADING & PONA]                [MODULE 5: COMPARATIVE 3-WAY LCA]
+
+Effective H/C Ratio                           - Baseline A: Sanitary Landfill
+
+PONA Distribution (Paraffin/Olefin/Aromatic)  - Baseline B: Mass-burn Incineration
+
+Refinery Stream Target (Steam Cracker vs Hydro) - Closed-Loop Pyrolysis (Avoided CO2e)
+### MODULE 1: FEEDSTOCK SYNERGY, CONTAMINATION, AND ACID GAS SCRUBBER SIZING
+Create/Extend `ml/app/stoichiometry.py` (and export types to frontend):
+
+1. **PVC Dechlorination Chemistry:**
+   - For every kilogram of feed with $w_{\text{PVC}}$ weight fraction:
+     $$m_{\text{HCl}} = \text{Feed Mass (kg)} \times w_{\text{PVC}} \times \left(\frac{M_{\text{HCl}}}{M_{\text{VCM}}}\right) = \text{Feed Mass} \times w_{\text{PVC}} \times \left(\frac{36.46}{62.50}\right) \approx 0.5834 \times m_{\text{PVC}}$$
+   - Calculate neutralizer consumption using hydrated lime $\text{Ca(OH)}_2$:
+     $$\text{Ca(OH)}_2 + 2\text{HCl} \rightarrow \text{CaCl}_2 + 2\text{H}_2\text{O}$$
+     $$m_{\text{Ca(OH)}_2} = \left(\frac{m_{\text{HCl}}}{2 \times 36.46}\right) \times 74.09 \times \text{Safety Factor (1.20)}$$
+   - Generate automated industrial alert:
+     * If $w_{\text{PVC}} > 0.5\%$: Trigger `ACID_GAS_CORROSION_RISK` warning and output required $\text{Ca(OH)}_2$ guard bed mass (kg/day).
+     * Recommend operational stage: *"Two-stage thermal treatment required: Isothermal pre-dechlorination at 300Â°C prior to main pyrolysis reactor."*
+
+2. **PET Terephthalic Sublimation Risk:**
+   - If $w_{\text{PET}} > 3.0\%$: Flag `SOLID_DEPOSITION_RISK` (Sublimation of terephthalic/benzoic acid causes condenser tube fouling and wax polymerization).
+
+3. **Radical Synergy Index:**
+   - High polyolefin fraction ($PE + PP > 70\%$) accelerates hydrogen transfer to PS radicals, lowering heavy tar formation. Classify synergy as `HIGH_SYNERGY`, `NEUTRAL`, or `ANTAGONISTIC`.
+
+---
+
+### MODULE 2: THERMODYNAMICS, HHV & THERMAL AUTARKY (NET ENERGY RATIO)
+Implement rigorous energy balances inside `ml/app/thermodynamics.py`:
+
+1. **Elemental Composition & Feedstock HHV:**
+   - Standard polymer elemental mass fractions:
+     * PE/PP ($\text{C}_2\text{H}_4 / \text{C}_3\text{H}_6$): $C = 85.71\%, H = 14.29\%$
+     * PS ($\text{C}_8\text{H}_8$): $C = 92.26\%, H = 7.74\%$
+     * PVC ($\text{C}_2\text{H}_3\text{Cl}$): $C = 38.43\%, H = 4.84\%, Cl = 56.73\%$
+     * PET ($\text{C}_{10}\text{H}_8\text{O}_4$): $C = 62.50\%, H = 4.17\%, O = 33.33\%$
+   - Compute aggregate feed elemental fractions: $C_{\text{blend}}, H_{\text{blend}}, O_{\text{blend}}, Cl_{\text{blend}}$.
+   - Compute Higher Heating Value using modified Dulong/Boie correlation:
+     $$\text{HHV}_{\text{feed}} (\text{MJ/kg}) = 0.3491\,C + 1.1783\,H - 0.1034\,O - 0.0151\,Cl$$
+
+2. **Reactor Parasitic Heat Demand ($Q_{\text{required}}$):**
+   - Sensible heat to raise feed from $T_{\text{ambient}} = 25^\circ\text{C}$ to $T_{\text{reactor}}$ (mean specific heat $c_p \approx 2.1\text{ kJ/kg}\cdot\text{K}$):
+     $$Q_{\text{sensible}} = \text{Feed Mass} \times c_p \times (T_{\text{reactor}} - 25)$$
+   - Endothermic heat of reaction/cracking ($\Delta H_{\text{rxn}} \approx 1050\text{ kJ/kg}$ for polyolefins).
+   - Thermal loss factor (assume 15% convective/radiative casing losses):
+     $$Q_{\text{total\_thermal}} = (Q_{\text{sensible}} + \Delta H_{\text{rxn}}) \times 1.15$$
+
+3. **Syngas Energy & Thermal Autarky:**
+   - Syngas fraction heating value ($\text{LHV}_{\text{gas}} \approx 32.0\text{ MJ/kg}$ for hydrocarbon cracked syngas).
+   - Energy recovered in non-condensable gas:
+     $$E_{\text{gas}} = m_{\text{gas}} \times \text{LHV}_{\text{gas}}$$
+   - **Autarky Metric:**
+     $$\text{Thermal Autarky (\%)} = \min\left(100.0, \frac{E_{\text{gas}}}{Q_{\text{total\_thermal}}} \times 100\right)$$
+     $$\text{Net Energy Ratio (NER)} = \frac{E_{\text{oil}} + E_{\text{gas}}}{Q_{\text{total\_thermal}} + E_{\text{electrical\_parasitic}}}$$
+   - Report clearly whether the plant can run self-sustained without external natural gas combustion.
+
+---
+
+### MODULE 3: DOWNSTREAM PYROLYSIS OIL UPGRADING & PONA ESTIMATOR
+Implement output oil chemical classification in `ml/app/oil_quality.py`:
+
+1. **Effective $H/C$ Atomic Ratio:**
+   $$H/C = \frac{(H_{\text{oil\_wt\%}} / 1.008)}{(C_{\text{oil\_wt\%}} / 12.011)}$$
+   * $H/C \ge 1.85$: High paraffinic/olefinic aliphatic cut.
+   * $1.60 \le H/C < 1.85$: Mixed synthetic crude.
+   * $H/C < 1.60$: Heavy aromatic cut (dominated by PS styrene monomer/dimer/oligomer fractions).
+
+2. **PONA Hydrocarbon Estimate:**
+   - **Paraffins & Olefins ($\approx$ PE + PP influence):** Linear carbon chains ($\text{C}_6 - \text{C}_{24}$).
+   - **Aromatics ($\approx$ PS influence):** Benzene, toluene, ethylbenzene, styrene.
+   - **Naphthenes/Oxygenates ($\approx$ PET/PVC influence):** Polar traces requiring hydrodeoxygenation.
+
+3. **Refinery Upgrading Classification Recommendation:**
+   - Emit one of three industrial routing verdicts:
+     1. *"Direct Petrochemical Feedstock: Suitable for steam cracker blending up to 10% without hydrotreatment."*
+     2. *"Hydroprocessing Required: Saturated dewaxing & de-aromatization needed for EN 590 diesel compliance."*
+     3. *"Heavy Industrial Fuel Oil: Sub-spec for transportation; suitable for industrial boilers/furnaces."*
+
+---
+
+### MODULE 4: 3-WAY COMPARATIVE LIFE CYCLE ASSESSMENT (LCA) DISPLACEMENT ENGINE
+Implement environmental displacement math in `ml/app/lca.py`:
+
+Compare 1 Metric Ton (1000 kg) processed across three pathways:
+
+1. **Pathway A (Sanitary Landfill):**
+   - Direct fossil $\text{CO}_2$: Low initial emissions ($0.05\text{ kg CO}_2\text{e/kg}$).
+   - Environmental Penalty: $1.0\text{ m}^3$ landfill volume consumed; long-term microplastic and phthalate leachate liability.
+
+2. **Pathway B (Waste-to-Energy Incineration):**
+   - Stoichiometric combustion of carbon into atmospheric $\text{CO}_2$:
+     $$\text{Emissions}_{\text{incineration}} = \text{Feed Mass} \times C_{\text{blend}} \times \left(\frac{44.01}{12.011}\right) \approx 2.8 - 3.1\text{ Tonnes CO}_2\text{e / Ton plastic}$$
+   - Grid electricity displacement credit: $-0.65\text{ Tonnes CO}_2\text{e}$ (assuming 25% net thermal-to-electric efficiency at $0.4\text{ kg CO}_2/\text{kWh}$).
+   - Net Carbon Footprint: $+2.25\text{ Tonnes CO}_2\text{e / Ton plastic}$.
+
+3. **Pathway C (CHEM2ENERGY Catalyzed Pyrolysis & Circular Recovery):**
+   - Direct process thermal footprint: $+0.35\text{ Tonnes CO}_2\text{e}$ (fuel consumed for heating).
+   - Virgin naphtha extraction & refining displacement credit:
+     $$\text{Credit}_{\text{avoided}} = -1.0 \times m_{\text{oil}} \times 1.75\text{ kg CO}_2\text{e/kg naphtha}$$
+   - Net Circular Carbon Impact:
+     $$\Delta \text{CO}_2\text{e}_{\text{net}} = \text{Emissions}_{\text{process}} - \text{Credit}_{\text{displaced}}$$
+   - Calculate and display: **"Net Carbon Avoided vs Incineration"** ($\text{Tonnes CO}_2\text{e / Day}$).
+
+---
+
+### FRONTEND INTEGRATION & SCIENTIFIC VISUALIZATION
+
+1. **Chemical Intelligence Tab (`/app/chemical-intelligence`):**
+   - **Acid Gas & Pretreatment Card:** Shows exact $\text{HCl}$ release risk with real-time calculated $\text{Ca(OH)}_2$ sorbent requirement in kg/batch.
+   - **Thermal Autarky Dial:** Circular gauge showing % self-heating capability from syngas ($0 - 100\%$).
+   - **PONA Distribution Chart:** Stacked horizontal bar displaying estimated Paraffin / Olefin / Aromatic / Other fractions.
+
+2. **LCA Impact Comparison Card (`/app/impact`):**
+   - 3-Column comparative matrix: Landfill vs Incineration vs Pyrolysis.
+   - Distinct badges for: Net Carbon Emissions ($\text{kg CO}_2\text{e/kg}$), Net Energy Gain (MJ), and Circular Polymer Yield.
+
+3. **Saathi Context Injection (`src/saathi/tools/`):**
+   - Allow Saathi to directly answer deep chemical questions:
+     * *"What is the HCl corrosion risk?"* -> Saathi quotes the exact stoichiometric lime requirement.
+     * *"Is the process energy positive?"* -> Saathi provides the Thermal Autarky percentage and explains parasitic heat requirements.
+     * *"Can this oil go into a refinery?"* -> Saathi assesses the $H/C$ ratio and states whether hydrotreating is mandatory.
+
+---
+
+### EXECUTION REQUIREMENTS
+1. Maintain existing FastAPI and React endpoints; add the new calculations into unified endpoint responses (`/api/analysis`, `/api/what-if`).
+2. Write unit tests in `ml/tests/test_scientific_modules.py` asserting:
+   - Conservation of mass across $\text{HCl}$ dehydrochlorination and carbon combustion balances.
+   - Thermal autarky never exceeds physical boundaries or uses non-standard polymer $c_p$ values.
+   - PONA percentages cleanly sum to 100%.
+3. Print a verification summary with smoke-test outputs for a mixed batch (`PE: 45%`, `PP: 30%`, `PS: 15%`, `PVC: 2%`, `PET: 8%`, `Temp: 520Â°C`).

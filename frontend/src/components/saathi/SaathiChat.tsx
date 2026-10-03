@@ -11,6 +11,7 @@ import { SaathiAvatar } from "./SaathiAvatar";
 import { avatarStatusText, deriveAvatarState, type LocalState } from "./SaathiState";
 import { speakText, speechToTextSupported, startListening, stopSpeaking, textToSpeechSupported, voiceAvailable, type SpeechLanguage } from "./SaathiVoice";
 import { detectVoiceIntent } from "../../saathi/tools/intentDetector";
+import { AudioWaveVisualizer } from "../../saathi/components/AudioWaveVisualizer";
 
 type Preference = "auto" | SpeechLanguage;
 
@@ -349,10 +350,18 @@ export function SaathiChat() {
         <div className="flex items-start gap-3">
           <SaathiAvatar state={avatarState} mouth={mouth} size="small" />
           <div className="min-w-0 flex-1">
-            <p className="text-[11px] uppercase tracking-[0.16em] text-muted">Saathi · {avatarStatusText(avatarState)}</p>
-            <p className="mt-1 text-sm leading-5" aria-live="polite">
+            <p className="text-[11px] uppercase tracking-[0.16em] text-emerald-400 font-mono">Saathi · {avatarStatusText(avatarState)}</p>
+            <p className="mt-1 text-sm leading-5 text-zinc-100" aria-live="polite">
               {engine.caption ?? "Starting the guided demo."}
             </p>
+            <div className="mt-2">
+              <AudioWaveVisualizer
+                isSpeaking={local === "speaking"}
+                audioLevel={mouth}
+                state={avatarState}
+                className="h-6"
+              />
+            </div>
           </div>
         </div>
         <div className="mt-2">{controls}</div>
@@ -370,15 +379,16 @@ export function SaathiChat() {
       )}
       {open ? (
         <section className="saathi-panel" aria-label="Saathi" data-guided-ui>
-          <header className="flex items-center justify-between border-b border-line px-4 py-3">
+          <header className="flex items-center justify-between border-b border-emerald-500/20 bg-black/40 px-4 py-3">
             <div>
-              <p className="text-[11px] uppercase tracking-[0.16em] text-muted">CHEM2ENERGY</p>
-              <h2 className="font-serif text-2xl">Saathi</h2>
+              <p className="text-[11px] uppercase tracking-[0.16em] text-emerald-400 font-mono">CHEM2ENERGY AI</p>
+              <h2 className="font-serif text-2xl text-white">Saathi</h2>
             </div>
             <div className="flex items-center gap-3">
               <span className={`saathi-live ${avatarState === "error" ? "is-error" : ""}`}>{avatarState === "error" ? "Retry" : "Live"}</span>
               <button
                 type="button"
+                className="text-zinc-400 hover:text-white text-sm"
                 onClick={() => {
                   stopSpeaking();
                   setOpen(false);
@@ -391,7 +401,13 @@ export function SaathiChat() {
           </header>
           <div className="flex-1 space-y-4 overflow-auto px-4 py-4">
             <SaathiAvatar state={avatarState} mouth={mouth} />
-            <p className="text-center text-sm text-muted" aria-live="polite">
+            <AudioWaveVisualizer
+              isSpeaking={local === "speaking"}
+              audioLevel={mouth}
+              state={avatarState}
+              className="my-1"
+            />
+            <p className="text-center text-sm text-zinc-400" aria-live="polite">
               {avatarStatusText(avatarState)}
             </p>
             <SaathiActionCard activity={activity} />

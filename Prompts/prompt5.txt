@@ -1,0 +1,82 @@
+﻿```markdown
+You are an autonomous senior ML engineer and chemical data architect working on the CHEM2ENERGY AI repository.
+
+Your objective is to run the complete end-to-end data ingestion, pipeline validation, surrogate ML retraining, and artifact serialization workflow using the newly uploaded experimental benchmark dataset.
+
+============================================================
+1. PREREQUISITES & WORKSPACE AUDIT
+============================================================
+1. Check that `eg2c00038_si_001.pdf` and `IngestionScript.py` exist in the root or working directory.
+2. Inspect `IngestionScript.py` to confirm required libraries (`pdfplumber`, `pandas`, `numpy`, `scikit-learn`). Install any missing packages in the active virtual environment if needed.
+3. Review `dataset_schema.md` and `ml/app/config.py` to ensure exact column alignment.
+
+============================================================
+2. DATA EXTRACTION & INGESTION
+============================================================
+1. Run `IngestionScript.py` to parse Table SI.1 from `eg2c00038_si_001.pdf`.
+2. Save the output to `ml/data/demo_dataset.csv`.
+3. Validate the parsed dataset:
+   - Must contain clean numerical values for `pe_pct`, `pp_pct`, `ps_pct`, `pvc_pct`, `pet_pct`, `temperature`, and `oil_pct`.
+   - Ensure `pe_pct` correctly combines `HDPE + LDPE`.
+   - Enforce mass balance closure: `oil_pct + gas_pct + char_pct + other_product_pct == 100.0`.
+   - Confirm the `source` field is labeled: `"WPI Pyrolysis Benchmark (Belden et al., 2022)"`.
+   - Verify that non-catalytic/thermal entries are prioritized or appropriately flagged.
+   - Assert that no `NaN`, `null`, or `inf` values exist in feature or target columns.
+
+============================================================
+3. ARTIFACT PURGE & RETRAINING
+============================================================
+1. Delete any obsolete or cached training artifacts in `ml/artifacts/` (e.g., old `.pkl`, `.joblib`, and `model_metadata.json`).
+2. Run the model training pipeline:
+   ```bash
+   cd ml
+   python -m app.train
+
+```
+
+3. During training:
+* Fit multiple regression architectures (Linear/Ridge baseline, Random Forest, and Gradient Boosting/XGBoost if present).
+* Use a strictly separated 80/20 train-test split with 5-fold cross-validation on the training set to prevent data leakage.
+* Compute evaluation metrics for all targets (`oil_pct`, `gas_pct`, `char_pct`): MAE, RMSE, and RÂ².
+* Select the optimal production model based on holdout validation performance.
+* Serialize the winning pipeline and trained estimators into `ml/artifacts/`.
+* Write out `ml/artifacts/model_metadata.json` containing:
+* Selected model architecture and hyperparameters
+* Feature names and calculated permutation/tree feature importances
+* CV metrics and test set holdout metrics (MAE, RMSE, RÂ²)
+* Training dataset size and empirical process bounds (temperature min/max, polymer ranges)
+
+
+
+
+
+# ============================================================
+4. SMOKE TEST & BOUNDARY INTEGRATION
+
+1. Run a smoke test on `ml/app/optimize.py` and `ml/app/simulator.py` to confirm they load the new artifacts without shape mismatches or schema errors.
+2. Execute an inference test with sample input:
+* Feed: `PE: 50%`, `PP: 30%`, `PS: 20%`, `Temperature: 500Â°C`
+* Assert that predictions produce valid bounded yields and sum to 100.0%.
+
+
+3. Test the optimization bounds: verify that the optimizer restricts candidate evaluations to the actual temperature and composition domain observed in the training dataset.
+
+# ============================================================
+5. DOCUMENTATION UPDATE & REPORTING
+
+1. Update `DATASET.md` and `MODEL_CARD.md`:
+* Replace synthetic mentions with the real laboratory provenance: "325 experimental runs from Belden et al., Worcester Polytechnic Institute (DOI: 10.1021/acs.energyfuels.2c00038)".
+* State the measured vs derived distinction: `oil_pct` is experimentally measured; `gas_pct` and `char_pct` are derived mass-balance closures.
+* Populate actual RÂ² and MAE scores from `model_metadata.json`.
+
+
+2. Print a concise final summary showing:
+* Total rows extracted and written to `ml/data/demo_dataset.csv`
+* Model comparison summary table (Model Name | CV MAE | Test MAE | Test RÂ²)
+* Verified list of saved artifacts in `ml/artifacts/`
+
+
+
+```
+
+```

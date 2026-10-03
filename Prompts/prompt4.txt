@@ -1,0 +1,1269 @@
+﻿PROMPT 4 â€” BUILD A FULL STEP-BY-STEP ANIMATED CHEM2ENERGY EXPERIENCE
+
+You are continuing work on the existing CHEM2ENERGY AI + Saathi project.
+
+IMPORTANT:
+Do NOT redesign the scientific backend.
+Do NOT change the ML model.
+Do NOT create fake scientific data.
+Do NOT replace the existing APIs.
+
+The goal of this prompt is purely to transform the current static/simple UI transitions into a highly polished, cinematic, step-by-step animated scientific workflow.
+
+The application should visually SHOW the analysis happening.
+
+It should feel like the user is watching an intelligent waste-analysis system operate in real time.
+
+============================================================
+1. CORE EXPERIENCE
+============================================================
+
+Do NOT use generic loading spinners such as:
+
+"Loading..."
+"Processing..."
+
+Instead, whenever Saathi performs an operation, show a meaningful animated representation of the actual pipeline.
+
+Example:
+
+Waste Sample
+      â†“
+Material Composition
+      â†“
+Validation
+      â†“
+ML Analysis
+      â†“
+Prediction
+      â†“
+Feature Explanation
+      â†“
+Optimization
+      â†“
+What-If Simulation
+      â†“
+Impact / Limitations
+      â†“
+Report
+
+Every stage should have:
+
+- its own visual identity
+- entrance animation
+- processing animation
+- completion animation
+- transition to the next stage
+- connection to actual application state
+
+============================================================
+2. GLOBAL PIPELINE VISUALIZATION
+============================================================
+
+Create a reusable:
+
+<AnalysisPipeline />
+
+component.
+
+Example:
+
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚ SAMPLE  â”‚
+â””â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”˜
+     â”‚
+     â–¼
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚ COMPOSITION  â”‚
+â””â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+     â”‚
+     â–¼
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚ VALIDATION â”‚
+â””â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”˜
+     â”‚
+     â–¼
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚ ML ENGINE  â”‚
+â””â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”˜
+     â”‚
+     â–¼
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚ PREDICTION â”‚
+â””â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”˜
+     â”‚
+     â–¼
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚ OPTIMIZER  â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+
+The active step should visually travel through the pipeline.
+
+Do not make this just a static timeline.
+
+The active node should:
+
+- glow
+- expand slightly
+- show processing
+- animate the connection
+- transition to completed state
+
+Completed nodes should remain visually completed.
+
+============================================================
+3. STEP STATES
+============================================================
+
+Every step must support:
+
+IDLE
+ACTIVE
+PROCESSING
+SUCCESS
+ERROR
+SKIPPED
+UNAVAILABLE
+
+Example:
+
+IDLE:
+â—‹ Validation
+
+ACTIVE:
+â—‰ Validation
+Checking material balance...
+
+PROCESSING:
+animated internal visualization
+
+SUCCESS:
+âœ“ Validation complete
+
+ERROR:
+âœ• Validation failed
+
+UNAVAILABLE:
+â€” Carbon impact unavailable
+
+Do not use the same animation for every state.
+
+============================================================
+4. SAMPLE INGESTION ANIMATION
+============================================================
+
+When analysis starts, visually animate the sample entering the system.
+
+Possible sequence:
+
+Waste sample card
+        â†“
+particles/material fragments
+        â†“
+composition breakdown
+        â†“
+PE / PP / PET / PS / PVC / Other
+
+Represent each material as a visual element.
+
+Example:
+
+          WASTE SAMPLE
+               â”‚
+       â”Œâ”€â”€â”€â”€â”€â”€â”€â”´â”€â”€â”€â”€â”€â”€â”€â”
+       â†“       â†“       â†“
+      PE      PP      PET
+       â†“       â†“       â†“
+              PS
+              â†“
+             PVC
+
+Use animated particles/cards/bars.
+
+The animation should reflect the ACTUAL sample percentages.
+
+Do not animate values that do not exist.
+
+============================================================
+5. MATERIAL COMPOSITION ANIMATION
+============================================================
+
+When showing:
+
+PE = X%
+PP = Y%
+PET = Z%
+PS = A%
+PVC = B%
+Other = C%
+
+animate the composition bars from:
+
+0 â†’ actual value.
+
+Use staggered animation.
+
+Example:
+
+PE â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆ
+PP â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆ
+PET â–ˆâ–ˆâ–ˆâ–ˆâ–ˆ
+PS â–ˆâ–ˆâ–ˆ
+PVC â–ˆâ–ˆ
+Other â–ˆâ–ˆâ–ˆâ–ˆ
+
+Bars should physically grow.
+
+Numbers should count upward.
+
+Use actual values from the selected sample.
+
+Do not hardcode demo values.
+
+============================================================
+6. MATERIAL BALANCE ANIMATION
+============================================================
+
+Create an animated balance visualization.
+
+Example:
+
+PE
++
+PP
++
+PET
++
+PS
++
+PVC
++
+Other
+        â†“
+   100% MATERIAL
+
+Animate each component flowing into a circular or rectangular 100% balance indicator.
+
+Then show:
+
+âœ“ Material balance validated
+
+If invalid:
+
+the balance should visually break.
+
+For example:
+
+100% expected
+103% received
+
+Show:
+
+âœ• Material balance invalid
+
+Do not silently correct the input.
+
+============================================================
+7. CHEMICAL PROFILE VISUALIZATION
+============================================================
+
+Create an animated molecular/material visualization.
+
+Important:
+
+Do NOT imply that the system measured molecular structure.
+
+This is a visual representation of the supplied polymer categories.
+
+Example:
+
+PE â†’ polymer chain visual
+PP â†’ polymer chain visual
+PET â†’ aromatic/polymer visual
+PS â†’ aromatic/polymer visual
+PVC â†’ chlorine-containing polymer visual
+
+Label clearly:
+
+"Theoretical / categorical representation"
+
+Do not claim laboratory molecular analysis.
+
+============================================================
+8. VALIDATION ANIMATION
+============================================================
+
+When validation starts:
+
+Show checks appearing sequentially:
+
+âœ“ Required fields present
+âœ“ Numeric ranges valid
+âœ“ Material fractions valid
+âœ“ Material balance checked
+âœ“ Process parameters within supported range
+
+Each check should appear one after another.
+
+Use a small animated verification indicator.
+
+At the end:
+
+VALIDATION COMPLETE
+
+Do not show checks that the backend did not actually perform.
+
+Only visualize real validation results.
+
+============================================================
+9. ML ENGINE ANIMATION
+============================================================
+
+This should be one of the most visually impressive parts.
+
+When prediction begins:
+
+Transition from the validated sample into an animated ML engine.
+
+Concept:
+
+Input vectors
+     â†“
+Feature transformation
+     â†“
+Model
+     â†“
+Output nodes
+
+Visual:
+
+PE â”€â”€â”€â”€â”€â”
+PP â”€â”€â”€â”€â”€â”¤
+PET â”€â”€â”€â”€â”¤
+PS â”€â”€â”€â”€â”€â”¤
+PVC â”€â”€â”€â”€â”¤
+Moistureâ”¤
+Temp â”€â”€â”€â”¤â”€â”€â†’ [ ML MODEL ] â”€â”€â†’ Oil
+Size â”€â”€â”€â”¤                     Gas
+Feed â”€â”€â”€â”¤                     Char
+Time â”€â”€â”€â”˜                     Other
+
+Animate data particles flowing from left to right.
+
+The model box should pulse while prediction is running.
+
+Then output particles should move toward:
+
+Oil
+Gas
+Char
+Other
+
+============================================================
+10. PREDICTION REVEAL
+============================================================
+
+Do not immediately show all results.
+
+Reveal them sequentially.
+
+Example:
+
+Analyzing...
+
+â†“
+
+Oil yield
+61.8%
+
+â†“
+
+Gas yield
+24.7%
+
+â†“
+
+Char
+8.9%
+
+â†“
+
+Other
+4.6%
+
+Use count-up animation.
+
+After all values appear:
+
+show a complete product-distribution visualization.
+
+Possible visualization:
+
+donut chart
+stacked bar
+flow diagram
+
+Use the actual API response.
+
+Do not fabricate numbers.
+
+============================================================
+11. PRODUCT FLOW ANIMATION
+============================================================
+
+Create an animated Sankey-style conceptual flow:
+
+Waste
+  â”‚
+  â”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â†’ Oil
+  â”‚
+  â”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â†’ Gas
+  â”‚
+  â”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â†’ Char
+  â”‚
+  â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â†’ Other
+
+Animated particles should flow along the paths.
+
+Path thickness should correspond to actual predicted percentages.
+
+Clearly label:
+
+"Model-estimated product distribution"
+
+This is NOT a physical process simulation.
+
+============================================================
+12. EXPLAINABILITY ANIMATION
+============================================================
+
+When user asks:
+
+"Why did the model produce this result?"
+
+animate the transition:
+
+Prediction
+    â†“
+Feature Importance
+
+Show features appearing in ranked order.
+
+Example:
+
+Temperature       â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆ
+Residence Time    â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆ
+PE                â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆ
+Moisture          â–ˆâ–ˆâ–ˆâ–ˆ
+
+But:
+
+DO NOT call this causal importance.
+
+Label:
+
+"Permutation importance"
+
+and explain:
+
+"This indicates how much model performance changes when a feature is permuted. It does not establish physical causation."
+
+Animate each feature bar.
+
+============================================================
+13. OPTIMIZATION ANIMATION
+============================================================
+
+When Saathi starts optimization, create an animated search visualization.
+
+Example:
+
+                 SEARCH SPACE
+
+Temperature
+430 â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ 530
+
+Residence Time
+20 â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ 80
+
+Particle Size
+1 â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ 8
+
+Feed Rate
+6 â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ 28
+
+Show animated candidate points moving through this space.
+
+Then:
+
+Candidate 01
+Candidate 02
+Candidate 03
+...
+Candidate N
+
+The best model-supported candidate returned by the existing optimizer becomes highlighted.
+
+Important:
+
+Do NOT claim these are physical experiments.
+
+Label:
+
+"Model search within observed training-data ranges"
+
+Then reveal:
+
+Optimized parameters
++
+Predicted output
+
+============================================================
+14. WHAT-IF SIMULATION ANIMATION
+============================================================
+
+This should be a signature feature.
+
+When user says:
+
+"What if temperature becomes 520Â°C?"
+
+Create a split-screen transition.
+
+LEFT:
+
+CURRENT
+
+Temperature
+480Â°C
+
+Oil
+X%
+
+Gas
+Y%
+
+Char
+Z%
+
+RIGHT:
+
+WHAT-IF
+
+Temperature
+520Â°C
+
+Oil
+A%
+
+Gas
+B%
+
+Char
+C%
+
+Animate the difference.
+
+For example:
+
+Current bar:
+â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆ
+
+What-if:
+â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆ
+
+Show arrows:
+
+â†‘ Oil
+â†“ Char
+
+Only if the actual model output changed that way.
+
+Do not predefine the direction.
+
+============================================================
+15. PARAMETER SLIDER ANIMATION
+============================================================
+
+In What-If Lab, sliders should be animated.
+
+Temperature slider:
+
+430Â°C â”€â”€â”€â”€â”€â”€â”€â—â”€â”€â”€â”€â”€â”€â”€â”€ 530Â°C
+
+When the slider moves:
+
+- current simulation state updates
+- prediction cards transition smoothly
+- charts animate
+- Saathi can narrate the change
+
+Use debouncing to avoid excessive API calls.
+
+If simulation is expensive:
+
+show a short meaningful processing animation.
+
+Do not show fake progress percentages.
+
+============================================================
+16. SAATHI + VISUAL SYNCHRONIZATION
+============================================================
+
+Saathi's speech and the visual pipeline must be synchronized.
+
+Example:
+
+Saathi:
+
+"First, I'm checking the material composition."
+
+â†’ Composition animation starts.
+
+Saathi:
+
+"The material balance is valid."
+
+â†’ Validation completion animation.
+
+Saathi:
+
+"Now I'm sending the supported inputs to the prediction model."
+
+â†’ ML animation starts.
+
+Saathi:
+
+"The model estimates an oil fraction of..."
+
+â†’ Oil result reveals.
+
+This synchronization is extremely important.
+
+Do not make Saathi talk about one step while the UI displays another.
+
+============================================================
+17. SAATHI AVATAR STATES
+============================================================
+
+Saathi itself should react to pipeline state.
+
+IDLE:
+
+subtle breathing
+blinking
+
+LISTENING:
+
+avatar leans slightly forward
+microphone indicator
+
+THINKING:
+
+subtle processing animation
+
+VALIDATING:
+
+focused state
+
+ANALYZING:
+
+more active state
+
+SPEAKING:
+
+lip-sync / mouth animation
+
+SUCCESS:
+
+subtle positive animation
+
+ERROR:
+
+concern/error state
+
+Do not make Saathi overly cartoonish.
+
+The visual language should feel like:
+
+AI + climate technology + scientific dashboard.
+
+============================================================
+18. PAGE TRANSITION ANIMATIONS
+============================================================
+
+When Saathi navigates between pages:
+
+Do not instantly switch pages.
+
+Use:
+
+current page
+      â†“
+pipeline transition
+      â†“
+new page
+
+Use subtle:
+
+fade
+slide
+scale
+shared-element transition
+
+Do not use excessive motion.
+
+The application should remain professional.
+
+============================================================
+19. REPORT GENERATION ANIMATION
+============================================================
+
+When generating a report:
+
+Show:
+
+Collecting sample data
+        â†“
+Collecting prediction
+        â†“
+Collecting model metadata
+        â†“
+Collecting limitations
+        â†“
+Generating report
+        â†“
+Report ready
+
+Each step should reflect actual backend progress/state where available.
+
+Do NOT create fake progress percentages such as:
+
+37%
+52%
+81%
+
+unless the backend actually provides progress information.
+
+============================================================
+20. CARBON / UNAVAILABLE FEATURES
+============================================================
+
+When user asks for carbon impact:
+
+Do NOT create an impressive fake carbon animation.
+
+Instead use a scientifically honest animation.
+
+Example:
+
+Carbon Analysis
+
+[Data available?]
+
+âœ• Whole-sample carbon data
+âœ• Validated emission factor
+âœ• Fossil/biogenic carbon fraction
+
+Therefore:
+
+INSUFFICIENT DATA
+
+Then Saathi explains why.
+
+This should look intentional, not broken.
+
+============================================================
+21. TRUST CENTER ANIMATION
+============================================================
+
+Create an animated "Trust Center".
+
+Show four categories:
+
+MEASURED
+PREDICTED
+CALCULATED
+ILLUSTRATIVE
+
+Example:
+
+Measured:
+No laboratory dataset currently connected.
+
+Predicted:
+Oil / Gas / Char / Other
+
+Calculated:
+Material balance
+Theoretical polymer elemental contribution
+
+Illustrative:
+Hackathon demo dataset
+
+Use different visual treatment for each category.
+
+This is an important judge-facing feature.
+
+============================================================
+22. GLOBAL DATA FLOW MODE
+============================================================
+
+Add an optional "System View" / "AI Pipeline" visualization.
+
+It should show:
+
+USER
+ â†“
+SAMPLE
+ â†“
+BACKEND
+ â†“
+VALIDATION
+ â†“
+FASTAPI
+ â†“
+ML MODEL
+ â†“
+OPTIMIZER
+ â†“
+RESULT
+ â†“
+SAATHI
+ â†“
+USER
+
+Animate data packets travelling between components.
+
+This should be useful for technical judges.
+
+Do not expose internal secrets or credentials.
+
+============================================================
+23. MICRO-INTERACTIONS
+============================================================
+
+Add polished micro-interactions:
+
+Buttons:
+- hover
+- press
+- success
+
+Cards:
+- hover elevation
+- subtle border transition
+
+Charts:
+- animate on first appearance
+
+Numbers:
+- count-up
+
+Tabs:
+- smooth underline movement
+
+Tool calls:
+- small activity indicator
+
+Notifications:
+- slide in/out
+
+Do not over-animate.
+
+============================================================
+24. MOTION DESIGN RULES
+============================================================
+
+Animation should communicate meaning.
+
+Every animation must answer:
+
+"What is happening?"
+
+Avoid:
+
+random floating particles
+constant glowing
+unnecessary bouncing
+excessive 3D effects
+long intro animations
+
+Prefer:
+
+data movement
+state transitions
+progressive disclosure
+count-up numbers
+flow diagrams
+shared element transitions
+pipeline progression
+
+============================================================
+25. PERFORMANCE
+============================================================
+
+The animation system must not destroy application performance.
+
+Use:
+
+CSS transforms
+opacity
+requestAnimationFrame where necessary
+Framer Motion if already installed
+CSS animations where sufficient
+
+Avoid expensive DOM manipulation.
+
+Respect:
+
+prefers-reduced-motion
+
+If reduced motion is enabled:
+
+use minimal transitions.
+
+============================================================
+26. RESPONSIVENESS
+============================================================
+
+Animations must work on:
+
+desktop
+tablet
+mobile
+
+The main visualization should adapt.
+
+Do not make the pipeline impossible to understand on mobile.
+
+============================================================
+27. ACCESSIBILITY
+============================================================
+
+Do not communicate state using animation alone.
+
+For example:
+
+Instead of only:
+
+green glow
+
+also show:
+
+âœ“ Validation complete
+
+For errors:
+
+âœ• Validation failed
+
+Support:
+
+prefers-reduced-motion
+
+keyboard navigation
+
+screen-reader labels
+
+============================================================
+28. IMPLEMENTATION ARCHITECTURE
+============================================================
+
+Create reusable components such as:
+
+components/saathi/
+
+SaathiAvatar
+SaathiChat
+SaathiVoice
+SaathiState
+SaathiActionCard
+
+components/animations/
+
+AnalysisPipeline
+SampleFlowAnimation
+CompositionAnimation
+ValidationAnimation
+MLInferenceAnimation
+PredictionReveal
+ProductFlow
+FeatureImportanceAnimation
+OptimizationAnimation
+WhatIfComparison
+ReportGenerationAnimation
+TrustCenterAnimation
+SystemArchitectureAnimation
+
+Do not duplicate animation logic across pages.
+
+============================================================
+29. CENTRAL ANIMATION STATE MACHINE
+============================================================
+
+Create one central workflow state.
+
+Example:
+
+type AnalysisStage =
+  | "idle"
+  | "ingesting"
+  | "composition"
+  | "validation"
+  | "prediction"
+  | "explanation"
+  | "optimization"
+  | "simulation"
+  | "report"
+  | "complete"
+  | "error";
+
+And:
+
+interface AnalysisWorkflowState {
+  stage: AnalysisStage;
+  status: "idle" | "running" | "success" | "error";
+  sampleId?: string;
+  startedAt?: number;
+  completedAt?: number;
+  error?: string;
+}
+
+The animation layer should react to this state.
+
+Do NOT allow every component to independently invent its own workflow state.
+
+============================================================
+30. REAL API EVENTS
+============================================================
+
+Where possible, connect animations to actual API lifecycle events:
+
+REQUEST_STARTED
+REQUEST_SUCCESS
+REQUEST_ERROR
+
+Example:
+
+runPrediction()
+
+â†’ REQUEST_STARTED
+â†’ ML animation
+
+API returns
+
+â†’ REQUEST_SUCCESS
+â†’ Prediction reveal
+
+API error
+
+â†’ REQUEST_ERROR
+â†’ Error animation
+
+Do not pretend an operation succeeded before the API confirms success.
+
+============================================================
+31. EVENT BUS
+============================================================
+
+If appropriate for the existing architecture, implement a lightweight event system:
+
+analysis:start
+sample:validated
+prediction:start
+prediction:complete
+optimization:start
+optimization:complete
+simulation:start
+simulation:complete
+report:start
+report:complete
+analysis:error
+
+Saathi and visual components can subscribe to these events.
+
+Avoid tightly coupling Saathi directly to every animation component.
+
+============================================================
+32. CINEMATIC JUDGE DEMO
+============================================================
+
+Create a "Start Guided Demo" button.
+
+When clicked:
+
+Scene 1:
+Sample appears.
+
+Scene 2:
+Composition breaks down.
+
+Scene 3:
+Material balance validates.
+
+Scene 4:
+Inputs flow into ML engine.
+
+Scene 5:
+Prediction appears.
+
+Scene 6:
+Product distribution animates.
+
+Scene 7:
+Feature importance appears.
+
+Scene 8:
+Optimizer searches parameter space.
+
+Scene 9:
+Best model-supported setting appears.
+
+Scene 10:
+What-If comparison appears.
+
+Scene 11:
+Trust Center explains measured/predicted/illustrative data.
+
+Scene 12:
+Saathi summarizes.
+
+The demo should be:
+
+interactive
+interruptible
+replayable
+
+If the user interacts manually, guided mode should stop or pause gracefully.
+
+============================================================
+33. SAATHI GUIDED NARRATION
+============================================================
+
+During guided demo, Saathi should narrate each stage.
+
+Example:
+
+"Let's start with the material composition."
+
+[Composition animation]
+
+"Next, I'm validating whether the material fractions form a valid balance."
+
+[Validation animation]
+
+"The inputs are valid. Now I'm passing the supported variables to the prediction model."
+
+[ML animation]
+
+"The model estimates the following product distribution."
+
+[Prediction reveal]
+
+"Now let's see what the optimizer finds within the range represented by the training data."
+
+[Optimization animation]
+
+"The important distinction is that these are model-based estimates, not laboratory measurements."
+
+[Trust Center]
+
+Narration must be synchronized with actual animation events.
+
+============================================================
+34. DO NOT FABRICATE ANIMATION DATA
+============================================================
+
+This is critical.
+
+Animations may be visual.
+
+But the underlying numbers must always come from actual application state.
+
+Never create:
+
+fake model outputs
+fake optimization results
+fake carbon numbers
+fake emission reductions
+fake savings
+fake accuracy
+fake laboratory measurements
+
+Visual storytelling is allowed.
+
+Scientific fabrication is not.
+
+============================================================
+35. FINAL UX GOAL
+============================================================
+
+The final experience should feel like:
+
+A scientist gives a waste sample to an AI system.
+
+The AI:
+
+understands the sample
+      â†“
+checks it
+      â†“
+passes it through the model
+      â†“
+produces estimates
+      â†“
+explains the model
+      â†“
+searches supported operating conditions
+      â†“
+runs what-if scenarios
+      â†“
+explains limitations
+
+And the entire process is VISUALLY ANIMATED.
+
+The user should never wonder:
+
+"Is anything actually happening?"
+
+They should be able to SEE the system working.
+
+============================================================
+36. FINAL IMPLEMENTATION INSTRUCTION
+============================================================
+
+First inspect the existing repository.
+
+Identify:
+
+- existing UI framework
+- animation libraries already installed
+- existing chart libraries
+- existing state management
+- existing API lifecycle
+- existing Saathi implementation
+- existing routing
+- existing design system
+
+Reuse existing dependencies where possible.
+
+Do not introduce a huge dependency stack unnecessarily.
+
+Then implement the animation system incrementally.
+
+After implementation provide:
+
+1. components created
+2. components modified
+3. animation state machine
+4. events added
+5. API integrations
+6. animation library used
+7. how guided demo works
+8. how reduced-motion works
+9. how to test every animation
+10. known limitations
+
+The final result should not look like a website with random animations.
+
+It should look like a coherent animated AI scientific workflow.

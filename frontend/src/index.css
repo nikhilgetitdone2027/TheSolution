@@ -270,6 +270,81 @@ textarea {
   to { top: 100%; opacity: 0; }
 }
 
+@keyframes orb-breathe-1 {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 0.85;
+  }
+  50% {
+    transform: translate3d(-24px, 32px, 0) scale(1.15);
+    opacity: 1;
+  }
+}
+
+@keyframes orb-breathe-2 {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: translate3d(28px, -28px, 0) scale(1.18);
+    opacity: 1;
+  }
+}
+
+@keyframes pulse-travel {
+  from { stroke-dashoffset: 32; }
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes shimmer-stripes {
+  from { background-position: 0 0; }
+  to { background-position: 40px 0; }
+}
+
+@keyframes hud-float {
+  0%, 100% {
+    transform: translate3d(0, -4px, 0);
+  }
+  50% {
+    transform: translate3d(0, 4px, 0);
+  }
+}
+
+.ambient-orb-emerald {
+  animation: orb-breathe-1 16s ease-in-out infinite;
+}
+
+.ambient-orb-cyan {
+  animation: orb-breathe-2 18s ease-in-out infinite;
+}
+
+/* Liquid flow bars with continuous shimmer stripes */
+.liquid-bar-fill {
+  transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.liquid-bar-fill::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(
+    -45deg,
+    rgba(255, 255, 255, 0.18) 25%,
+    transparent 25%,
+    transparent 50%,
+    rgba(255, 255, 255, 0.18) 50%,
+    rgba(255, 255, 255, 0.18) 75%,
+    transparent 75%,
+    transparent
+  );
+  background-size: 20px 20px;
+  animation: shimmer-stripes 1.8s linear infinite;
+  pointer-events: none;
+}
+
 ::view-transition-old(root),
 ::view-transition-new(root) {
   animation-duration: 240ms;
@@ -393,6 +468,38 @@ button.pipeline-card:hover {
   overflow: hidden;
 }
 
+.pipeline-energy-link {
+  position: relative;
+  align-self: center;
+  width: 2px;
+  height: 16px;
+  overflow: visible;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.energy-beam-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.conduit-track {
+  stroke: rgba(213, 207, 194, 0.5);
+  transition: stroke 0.3s ease;
+}
+
+.pipeline-energy-link.is-done .conduit-track {
+  stroke: rgba(16, 185, 129, 0.45);
+}
+
+.conduit-pulse {
+  stroke-dasharray: 8 24;
+  animation: pulse-travel 1.4s linear infinite;
+  filter: drop-shadow(0 0 5px rgba(16, 185, 129, 0.8));
+}
+
 .pipeline-link.is-done {
   background: #1f4d38;
 }
@@ -404,7 +511,8 @@ button.pipeline-card:hover {
   width: 6px;
   height: 6px;
   border-radius: 999px;
-  background: #8a4b32;
+  background: #0ea5e9;
+  box-shadow: 0 0 8px #0ea5e9;
 }
 
 .pipeline-link.is-flowing .pipeline-packet {
@@ -418,7 +526,8 @@ button.pipeline-card:hover {
     row-gap: 8px;
   }
 
-  .pipeline-node:nth-child(5n) .pipeline-link {
+  .pipeline-node:nth-child(5n) .pipeline-link,
+  .pipeline-node:nth-child(5n) .pipeline-energy-link {
     visibility: hidden;
   }
 
@@ -427,9 +536,10 @@ button.pipeline-card:hover {
     align-items: stretch;
   }
 
-  .pipeline-link {
-    width: 12px;
-    height: 2px;
+  .pipeline-link,
+  .pipeline-energy-link {
+    width: 16px;
+    height: 6px;
     flex: none;
   }
 
@@ -450,7 +560,8 @@ button.pipeline-card:hover {
     grid-auto-columns: minmax(0, 1fr);
   }
 
-  .pipeline-node:nth-child(5n) .pipeline-link {
+  .pipeline-node:nth-child(5n) .pipeline-link,
+  .pipeline-node:nth-child(5n) .pipeline-energy-link {
     visibility: visible;
   }
 }
@@ -542,31 +653,48 @@ button.pipeline-card:hover {
   z-index: 40;
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  border: 1px solid #1c1915;
-  background: #1c1915;
-  color: #fff;
-  padding: 10px 16px;
-  font-size: 14px;
-  box-shadow: 0 8px 24px rgba(28, 25, 21, 0.2);
+  gap: 10px;
+  border: 1px solid rgba(16, 185, 129, 0.45);
+  background: rgba(11, 15, 23, 0.9);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  color: #f1f5f9;
+  padding: 10px 18px;
+  border-radius: 9999px;
+  font-size: 13px;
+  font-weight: 500;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5), 0 0 20px rgba(16, 185, 129, 0.2);
+  cursor: pointer;
+  animation: hud-float 4s ease-in-out infinite;
+  will-change: transform;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.saathi-launch:hover {
+  border-color: rgba(16, 185, 129, 0.8);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), 0 0 28px rgba(16, 185, 129, 0.35);
+  transform: translate3d(0, -3px, 0) scale(1.03);
 }
 
 .saathi-launch-dot {
-  width: 8px;
-  height: 8px;
+  width: 9px;
+  height: 9px;
   border-radius: 999px;
-  background: #7fb89a;
+  background: #10b981;
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.8);
 }
 
 .saathi-launch-dot.is-analyzing,
 .saathi-launch-dot.is-validating,
 .saathi-launch-dot.is-thinking {
-  background: #e3b27a;
+  background: #0ea5e9;
+  box-shadow: 0 0 10px rgba(14, 165, 233, 0.9);
   animation: pulse-ring 1.2s ease-out infinite;
 }
 
 .saathi-launch-dot.is-error {
-  background: #e07a7a;
+  background: #f43f5e;
+  box-shadow: 0 0 10px rgba(244, 63, 94, 0.9);
 }
 
 .saathi-panel {
@@ -576,12 +704,18 @@ button.pipeline-card:hover {
   z-index: 40;
   display: flex;
   flex-direction: column;
-  width: min(380px, calc(100vw - 32px));
+  width: min(390px, calc(100vw - 32px));
   height: min(680px, calc(100vh - 32px));
-  border: 1px solid #1c1915;
-  background: #f7f4ee;
-  box-shadow: 0 16px 40px rgba(28, 25, 21, 0.2);
-  animation: stage-enter 280ms ease-out both;
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  background: rgba(11, 15, 23, 0.92);
+  border: 1px solid rgba(16, 185, 129, 0.32);
+  border-radius: 1.25rem;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 35px rgba(16, 185, 129, 0.16);
+  color: #f1f5f9;
+  animation: stage-enter 280ms ease-out both, hud-float 4s ease-in-out 300ms infinite;
+  will-change: transform;
+  overflow: hidden;
 }
 
 .saathi-dock {
@@ -589,11 +723,17 @@ button.pipeline-card:hover {
   right: 16px;
   bottom: 16px;
   z-index: 40;
-  width: min(360px, calc(100vw - 32px));
-  border: 1px solid #1c1915;
-  background: #f7f4ee;
-  padding: 12px;
-  box-shadow: 0 16px 40px rgba(28, 25, 21, 0.2);
+  width: min(370px, calc(100vw - 32px));
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  background: rgba(11, 15, 23, 0.88);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  border-radius: 1rem;
+  padding: 14px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5), 0 0 24px rgba(16, 185, 129, 0.15);
+  color: #f1f5f9;
+  animation: hud-float 4s ease-in-out infinite;
+  will-change: transform;
 }
 
 .saathi-frame {

@@ -1,0 +1,65 @@
+# TASK: IMPLEMENT FLAWLESS CINEMATIC ANIMATIONS, DYNAMIC BACKGROUND & SCI-FI MICRO-INTERACTIONS
+
+You are the Principal Creative Technologist and WebGL Motion Graphics Architect on CHEM2ENERGY AI.
+
+### OBJECTIVE
+Completely transform the static visual layer into a dynamic, living, high-tech chemical intelligence dashboard. The background and cards must feel alive, smooth, and flawless (60 FPS, hardware-accelerated) without causing layout lag or interfering with scientific data reads.
+
+---
+
+### 1. DYNAMIC LIVING BACKGROUND (CANVAS + CSS SHADER EFFECTS)
+Create a persistent background layer component (`src/components/layout/AnimatedBackground.tsx`):
+1. **Interactive Chemical/Particle Lattice:**
+   - Use a lightweight HTML5 Canvas or Three.js particle field running behind the entire app (`z-index: 0`, `pointer-events: none`).
+   - Spawn 60–80 floating micro-nodes (representing hydrocarbon molecules/catalyst particles) drifting slowly with brownian motion.
+   - Draw subtle connecting lines (opacity 0.08, cyan/emerald) between nodes within a proximity threshold ($< 120\text{px}$).
+   - Add gentle mouse-repel physics: cursor ke paas aate hi particles smooth distance create karein.
+2. **Radial Ambient Glow Breathing:**
+   - Add two large blurred radial gradient orbs (`blur-[140px]`, `w-[500px] h-[500px]`) behind the main dashboard:
+     - Orb A: Deep Emerald (`#059669`, 10% opacity) in the top-right.
+     - Orb B: Cyber Cyan / Indigo (`#0ea5e9`, 8% opacity) in the bottom-left.
+   - Animate their positions and scale slowly using smooth CSS keyframe oscillation (period ~16s).
+
+---
+
+### 2. GLASSMORPHISM & DYNAMIC SPOTLIGHT CARDS
+Refactor UI cards (Overview cards, Telemetry, What-If Lab panels) to use mouse-tracking spotlight effects:
+1. **Spotlight Border Card Hook (`useSpotlight`):**
+   - Jab user kisi card par mouse ghumaye, mouse ke coordinate par ek radial gradient glow follow kare (`border` aur `background` highlights):
+     `background: radial-gradient(400px circle at ${mouse.x}px ${mouse.y}px, rgba(16,185,129,0.08), transparent 40%)`
+   - Border par dynamic neon edge flare render ho.
+2. **Backdrop Blur & Depth Hierarchy:**
+   - Use `backdrop-blur-xl bg-[#0b0f17]/80 border border-white/[0.08] shadow-[0_8px_32px_0_rgba(0,0,0,0.37)]`.
+
+---
+
+### 3. ANIMATED WORKFLOW PIPELINE (ENERGY PULSE FLOW)
+In the top stepper/pipeline bar:
+1. Replace static ticks with an active glowing energy beam (`svg` path animation):
+   - Jab step complete ho, ek animated energy pulse (gradient stroke dashoffset) line ke through agle node tak travel kare.
+2. Active Node state:
+   - Subtle breathing pulse ring animation around the active stage icon (`animate-ping` ya smooth SVG stroke expansion).
+   - Real-time processing indicator: rotating dashed circular border around running stages.
+
+---
+
+### 4. WHAT-IF LAB & METRICS ANIMATIONS
+1. **Framer Motion Counter Numbers:**
+   - Sliders move hone par yields (`oil_pct`, `gas_pct`, `char_pct`, temperatures) direct snap na hon; smooth spring counter interpolation ke sath roll/animate hon.
+2. **Dynamic Flow Bar Charts:**
+   - Sankey aur yield progress bars fluid liquid-fill animation use karein (`transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1)`).
+   - Bars ke andar continuous subtle animated stripes / light shimmer effect flow ho.
+
+---
+
+### 5. SAATHI DOCK FLOATING ANIMATION
+1. Saathi assistant container ko static side panel ke bajaye floating HUD look do:
+   - Subtle vertical hover floating physics (`translateY` oscillating by $\pm 4\text{px}$ over 4 seconds).
+   - Audio visualizer bars: CSS spring-driven scale transform instead of rigid redraws.
+
+---
+
+### 6. PERFORMANCE & ACCESSIBILITY GUARDRAILS
+1. Force GPU acceleration: `transform: translate3d(0,0,0)` and `will-change: transform`.
+2. Honor `prefers-reduced-motion`: Agar user ki accessibility setting active ho, toh heavy particle movements aur floating loops ko static subtle gradients mein degrade karo.
+3. Keep scientific text and numeric tables 100% crisp, high-contrast, and readable.

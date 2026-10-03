@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useState, useMemo } from "react";
 import type { AvatarState } from "../avatar/AvatarController";
 
 interface AudioWaveVisualizerProps {
@@ -8,139 +8,130 @@ interface AudioWaveVisualizerProps {
   className?: string;
 }
 
+const BAR_COUNT = 28;
+
 export function AudioWaveVisualizer({
   isSpeaking,
   audioLevel = 0,
   state = "idle",
   className = "",
 }: AudioWaveVisualizerProps) {
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const animFrameRef = useRef<number | null>(null);
-  const barHeightsRef = useRef<number[]>(new Array(32).fill(0));
-  const phaseRef = useRef<number>(0);
+  const [scales, setScales] = useState<number[]>(() =>
+    new Array(BAR_COUNT).fill(0.12)
+  );
+
+  // Formant spectral envelope for natural speech frequencies
+  const formants = useMemo(() => {
+    return Array.from({ length: BAR_COUNT }, (_, i) => {
+      const f1 = Math.exp(-Math.pow((i - 7) / 4.2, 2)) * 0.95;
+      const f2 = Math.exp(-Math.pow((i - 16) / 5.0, 2)) * 0.8;
+      const f3 = Math.exp(-Math.pow((i - 23) / 3.8, 2)) * 0.6;
+      return Math.max(f1, f2, f3, 0.15);
+    });
+  }, []);
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
+    const isReduced =
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    let dpr = window.devicePixelRatio || 1;
-    const resize = () => {
-      dpr = window.devicePixelRatio || 1;
-      const rect = canvas.getBoundingClientRect();
-      canvas.width = rect.width * dpr;
-      canvas.height = rect.height * dpr;
-    };
-    resize();
-    window.addEventListener("resize", resize);
+    if (isReduced) {
+      setScales(new Array(BAR_COUNT).fill(0.2));
+      return;
+    }
 
-    const checkReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const barCount = 32;
+    let phase = 0;
 
-    const render = () => {
-      const w = canvas.width;
-      const h = canvas.height;
-      ctx.clearRect(0, 0, w, h);
+    const interval = window.setInterval(() => {
+      phase += isSpeaking ? 0.28 : 0.08;
 
-      phaseRef.current += isSpeaking ? 0.18 : 0.04;
-      const phase = phaseRef.current;
-      const barWidth = (w / barCount) * 0.65;
-      const gap = (w / barCount) * 0.35;
-      const centerY = h * 0.5;
-
-      // Color scheme based on active state
-      let primaryColor = "#10b981"; // emerald-500
-      let secondaryColor = "#34d399"; // emerald-400
-      let glowColor = "rgba(16, 185, 129, 0.45)";
-
-      if (state === "listening") {
-        primaryColor = "#f59e0b"; // amber-500
-        secondaryColor = "#fbbf24";
-        glowColor = "rgba(245, 158, 11, 0.4)";
-      } else if (state === "thinking") {
-        primaryColor = "#06b6d4"; // cyan-500
-        secondaryColor = "#38bdf8";
-        glowColor = "rgba(6, 182, 212, 0.4)";
-      } else if (state === "error") {
-        primaryColor = "#ef4444";
-        secondaryColor = "#f87171";
-        glowColor = "rgba(239, 68, 68, 0.4)";
-      }
-
-      const gradient = ctx.createLinearGradient(0, centerY - h * 0.4, 0, centerY + h * 0.4);
-      gradient.addColorStop(0, secondaryColor);
-      gradient.addColorStop(0.5, primaryColor);
-      gradient.addColorStop(1, secondaryColor);
-
-      ctx.fillStyle = gradient;
-      ctx.shadowBlur = isSpeaking ? 10 * dpr : 4 * dpr;
-      ctx.shadowColor = glowColor;
-
-      for (let i = 0; i < barCount; i++) {
-        const x = i * (barWidth + gap) + gap * 0.5;
-        let targetHeight = 2 * dpr; // baseline idle height
-
-        if (isSpeaking && !checkReducedMotion) {
-          // Acoustic formant simulation: energy centered around vowels / voice bands
-          const formant1 = Math.exp(-Math.pow((i - 8) / 4.5, 2)) * 0.9;
-          const formant2 = Math.exp(-Math.pow((i - 18) / 5.5, 2)) * 0.75;
-          const formant3 = Math.exp(-Math.pow((i - 26) / 4.0, 2)) * 0.55;
-          const spectralEnvelope = Math.max(formant1, formant2, formant3, 0.15);
-
-          const wave = Math.sin(phase * 2.2 + i * 0.42) * Math.cos(phase * 1.4 - i * 0.28);
-          const dynamicAmp = Math.max(0.12, Math.abs(wave)) * (0.4 + (audioLevel || 0.4) * 0.6);
-          targetHeight = Math.max(3 * dpr, spectralEnvelope * dynamicAmp * (h * 0.85));
-        } else if (state === "listening" && !checkReducedMotion) {
-          // Subtle listening ripple
-          targetHeight = (2.5 + Math.sin(phase + i * 0.35) * 1.8) * dpr;
-        } else if (state === "thinking" && !checkReducedMotion) {
-          // Scanning pulse
-          const scan = Math.exp(-Math.pow((i - ((phase * 4) % barCount)) / 3.0, 2));
-          targetHeight = (2.0 + scan * 8.0) * dpr;
-        } else {
-          // Low-amplitude gentle baseline line with subtle micro-ripples
-          targetHeight = (1.5 + Math.sin(phase * 0.5 + i * 0.2) * 0.6) * dpr;
+      setScales(() => {
+        const next = new Array(BAR_COUNT);
+        for (let i = 0; i < BAR_COUNT; i++) {
+          if (isSpeaking) {
+            const wave =
+              Math.sin(phase * 2.1 + i * 0.45) * Math.cos(phase * 1.5 - i * 0.3);
+            const dynamicAmp =
+              Math.max(0.18, Math.abs(wave)) * (0.45 + (audioLevel || 0.45) * 0.6);
+            next[i] = Math.min(1.0, Math.max(0.12, formants[i] * dynamicAmp * 1.1));
+          } else if (state === "listening") {
+            const ripple = 0.22 + Math.sin(phase * 1.2 + i * 0.38) * 0.15;
+            next[i] = Math.max(0.1, ripple);
+          } else if (state === "thinking") {
+            const scan = Math.exp(-Math.pow((i - ((phase * 3.5) % BAR_COUNT)) / 2.8, 2));
+            next[i] = Math.max(0.1, 0.15 + scan * 0.7);
+          } else {
+            // Idle gentle breathing baseline
+            const idle = 0.12 + Math.sin(phase * 0.6 + i * 0.25) * 0.05;
+            next[i] = Math.max(0.08, idle);
+          }
         }
-
-        // Smooth decay / approach
-        barHeightsRef.current[i] += (targetHeight - barHeightsRef.current[i]) * (isSpeaking ? 0.35 : 0.18);
-        const currentH = Math.max(1.5 * dpr, barHeightsRef.current[i]);
-
-        // Draw symmetrical centered rounded bar
-        const topY = centerY - currentH * 0.5;
-        ctx.beginPath();
-        if (typeof ctx.roundRect === "function") {
-          ctx.roundRect(x, topY, barWidth, currentH, barWidth * 0.5);
-        } else {
-          ctx.rect(x, topY, barWidth, currentH);
-        }
-        ctx.fill();
-      }
-
-      // Draw faint baseline connecting guide
-      ctx.shadowBlur = 0;
-      ctx.strokeStyle = glowColor;
-      ctx.lineWidth = 1 * dpr;
-      ctx.beginPath();
-      ctx.moveTo(0, centerY);
-      ctx.lineTo(w, centerY);
-      ctx.stroke();
-
-      animFrameRef.current = requestAnimationFrame(render);
-    };
-
-    animFrameRef.current = requestAnimationFrame(render);
+        return next;
+      });
+    }, 70); // ~14 updates/sec driving smooth CSS spring transitions
 
     return () => {
-      window.removeEventListener("resize", resize);
-      if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
+      window.clearInterval(interval);
     };
-  }, [isSpeaking, audioLevel, state]);
+  }, [isSpeaking, audioLevel, state, formants]);
+
+  // Color scheme based on state
+  const colors = useMemo(() => {
+    if (state === "listening") {
+      return {
+        bg: "from-amber-400 via-amber-500 to-amber-400",
+        shadow: "rgba(245, 158, 11, 0.4)",
+        border: "border-amber-500/30",
+      };
+    }
+    if (state === "thinking") {
+      return {
+        bg: "from-cyan-400 via-sky-500 to-cyan-400",
+        shadow: "rgba(6, 182, 212, 0.4)",
+        border: "border-cyan-500/30",
+      };
+    }
+    if (state === "error") {
+      return {
+        bg: "from-rose-400 via-red-500 to-rose-400",
+        shadow: "rgba(239, 68, 68, 0.4)",
+        border: "border-red-500/30",
+      };
+    }
+    return {
+      bg: "from-emerald-400 via-teal-500 to-emerald-400",
+      shadow: "rgba(16, 185, 129, 0.4)",
+      border: "border-emerald-500/30",
+    };
+  }, [state]);
 
   return (
-    <div className={`relative flex w-full flex-col items-center justify-center overflow-hidden rounded-lg bg-surface/80 px-2 py-1.5 backdrop-blur-sm border border-line/60 ${className}`}>
-      <canvas ref={canvasRef} className="h-6 w-full" />
+    <div
+      className={`relative flex h-8 w-full items-center justify-center overflow-hidden rounded-lg bg-[#0b0f17]/90 px-3 py-1.5 backdrop-blur-md border ${colors.border} ${className}`}
+      style={{
+        boxShadow: isSpeaking ? `0 0 16px ${colors.shadow}` : "none",
+      }}
+    >
+      {/* Central Guide Line */}
+      <div className="pointer-events-none absolute inset-x-2 top-1/2 h-px -translate-y-1/2 bg-white/10" />
+
+      {/* Spring-driven CSS transform bars */}
+      <div className="relative flex h-full w-full items-center justify-between gap-[3px]">
+        {scales.map((scale, i) => (
+          <span
+            key={i}
+            className={`h-full flex-1 rounded-full bg-gradient-to-b ${colors.bg}`}
+            style={{
+              transform: `translate3d(0,0,0) scaleY(${Math.max(0.08, scale)})`,
+              transformOrigin: "center center",
+              transition:
+                "transform 100ms cubic-bezier(0.34, 1.56, 0.64, 1), opacity 200ms ease",
+              opacity: isSpeaking ? 0.95 : 0.65,
+              willChange: "transform",
+            }}
+          />
+        ))}
+      </div>
     </div>
   );
 }

@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { formatNumber } from "../format";
+import { SpotlightCard } from "./layout/SpotlightCard";
+import { AnimatedCounter } from "./animations/AnimatedCounter";
 
 interface CommercialFeasibilityCardProps {
   oilPct?: number;
@@ -41,14 +43,14 @@ export function CommercialFeasibilityCard({
   const annualProjectedRevenue = totalDailyValue * annualOperatingDays;
 
   return (
-    <article className={`border border-line bg-surface p-5 shadow-card ${className}`}>
-      <header className="flex flex-wrap items-start justify-between gap-3 border-b border-line pb-3">
+    <SpotlightCard as="article" spotlightColor="emerald" className={`p-5 ${className}`}>
+      <header className="flex flex-wrap items-start justify-between gap-3 border-b border-white/[0.08] pb-3">
         <div>
-          <span className="text-[11px] font-mono uppercase tracking-[0.16em] text-muted">
+          <span className="text-[11px] font-mono uppercase tracking-[0.16em] text-emerald-400">
             Techno-Economic Feasibility
           </span>
-          <h2 className="font-serif text-2xl font-medium text-ink">Commercial Feasibility Estimator</h2>
-          <p className="mt-0.5 text-xs text-muted">
+          <h2 className="font-serif text-2xl font-medium text-white">Commercial Feasibility Estimator</h2>
+          <p className="mt-0.5 text-xs text-zinc-400">
             Derived directly from surrogate ML predicted product distribution
           </p>
         </div>
@@ -59,10 +61,10 @@ export function CommercialFeasibilityCard({
               key={tpd}
               type="button"
               onClick={() => setFeedstockKgPerDay(tpd)}
-              className={`rounded px-2.5 py-1 text-xs font-mono transition-colors ${
+              className={`rounded px-2.5 py-1 text-xs font-mono transition-all ${
                 feedstockKgPerDay === tpd
-                  ? "bg-pine text-white font-medium"
-                  : "border border-line bg-paper text-muted hover:text-ink"
+                  ? "bg-emerald-500 text-white font-medium shadow-[0_0_12px_rgba(16,185,129,0.4)]"
+                  : "border border-white/10 bg-white/[0.04] text-zinc-300 hover:text-white hover:bg-white/[0.08]"
               }`}
             >
               {tpd / 1000} T/day
@@ -74,23 +76,25 @@ export function CommercialFeasibilityCard({
       {/* Main KPI Grid */}
       <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {/* Metric 1: Daily Pyrolysis Oil */}
-        <div className="rounded-lg border border-line bg-paper/60 p-3.5">
-          <p className="text-[11px] uppercase tracking-wider text-muted">Pyrolysis Oil Yield</p>
-          <p className="mt-1 text-2xl font-bold font-mono text-emerald-600">
-            {formatNumber(dailyOilLiters, 0)} <span className="text-sm font-normal text-muted">L/day</span>
+        <div className="rounded-lg border border-white/[0.08] bg-white/[0.03] p-3.5 backdrop-blur-md">
+          <p className="text-[11px] uppercase tracking-wider text-zinc-400">Pyrolysis Oil Yield</p>
+          <p className="mt-1 text-2xl font-bold font-mono text-emerald-400">
+            <AnimatedCounter value={dailyOilLiters} decimals={0} />{" "}
+            <span className="text-sm font-normal text-zinc-400">L/day</span>
           </p>
-          <p className="mt-1 text-xs text-muted">
-            {formatNumber(dailyOilKg, 0)} kg ({oilPct.toFixed(1)}% yield @ 0.85 kg/L)
+          <p className="mt-1 text-xs text-zinc-400">
+            <AnimatedCounter value={dailyOilKg} decimals={0} /> kg ({oilPct.toFixed(1)}% yield @ 0.85 kg/L)
           </p>
         </div>
 
         {/* Metric 2: Estimated Daily Fuel Value */}
-        <div className="rounded-lg border border-line bg-paper/60 p-3.5">
-          <p className="text-[11px] uppercase tracking-wider text-muted">Daily Liquid Fuel Value</p>
-          <p className="mt-1 text-2xl font-bold font-mono text-ink">
-            ${formatNumber(dailyOilRevenue, 2)} <span className="text-sm font-normal text-muted">/day</span>
+        <div className="rounded-lg border border-white/[0.08] bg-white/[0.03] p-3.5 backdrop-blur-md">
+          <p className="text-[11px] uppercase tracking-wider text-zinc-400">Daily Liquid Fuel Value</p>
+          <p className="mt-1 text-2xl font-bold font-mono text-white">
+            <AnimatedCounter value={dailyOilRevenue} decimals={2} prefix="$" />{" "}
+            <span className="text-sm font-normal text-zinc-400">/day</span>
           </p>
-          <div className="mt-1 flex items-center justify-between text-xs text-muted">
+          <div className="mt-1 flex items-center justify-between text-xs text-zinc-400">
             <span>Benchmark: ${crudePricePerLiter.toFixed(2)}/L</span>
             <input
               type="range"
@@ -99,62 +103,64 @@ export function CommercialFeasibilityCard({
               step="0.01"
               value={crudePricePerLiter}
               onChange={(e) => setCrudePricePerLiter(Number(e.target.value))}
-              className="ml-2 w-16"
+              className="ml-2 w-16 accent-emerald-500"
               title="Adjust crude / diesel replacement value ($0.65 - $0.85)"
             />
           </div>
         </div>
 
         {/* Metric 3: Syngas Thermal Offset */}
-        <div className="rounded-lg border border-line bg-paper/60 p-3.5">
-          <p className="text-[11px] uppercase tracking-wider text-muted">Syngas Self-Heating</p>
-          <p className="mt-1 text-2xl font-bold font-mono text-amber-600">
-            {selfHeatingOffsetPct.toFixed(0)}% <span className="text-sm font-normal text-muted">offset</span>
+        <div className="rounded-lg border border-white/[0.08] bg-white/[0.03] p-3.5 backdrop-blur-md">
+          <p className="text-[11px] uppercase tracking-wider text-zinc-400">Syngas Self-Heating</p>
+          <p className="mt-1 text-2xl font-bold font-mono text-amber-400">
+            <AnimatedCounter value={selfHeatingOffsetPct} decimals={0} suffix="%" />{" "}
+            <span className="text-sm font-normal text-zinc-400">offset</span>
           </p>
-          <p className="mt-1 text-xs text-muted">
-            {formatNumber(dailyEnergyGeneratedMj, 0)} MJ generated (LHV 30 MJ/kg)
+          <p className="mt-1 text-xs text-zinc-400">
+            <AnimatedCounter value={dailyEnergyGeneratedMj} decimals={0} /> MJ generated (LHV 30 MJ/kg)
           </p>
         </div>
 
         {/* Metric 4: Annual Refinery Projection */}
-        <div className="rounded-lg border border-line bg-paper/60 p-3.5 bg-gradient-to-br from-paper/40 to-emerald-500/10">
-          <p className="text-[11px] uppercase tracking-wider text-muted">Annual Commercial Value</p>
-          <p className="mt-1 text-2xl font-bold font-mono text-emerald-700">
-            ${formatNumber(annualProjectedRevenue, 0)} <span className="text-sm font-normal text-muted">/yr</span>
+        <div className="rounded-lg border border-emerald-500/20 bg-gradient-to-br from-emerald-950/30 to-teal-950/20 p-3.5 backdrop-blur-md">
+          <p className="text-[11px] uppercase tracking-wider text-emerald-400">Annual Commercial Value</p>
+          <p className="mt-1 text-2xl font-bold font-mono text-emerald-300">
+            <AnimatedCounter value={annualProjectedRevenue} decimals={0} prefix="$" />{" "}
+            <span className="text-sm font-normal text-zinc-400">/yr</span>
           </p>
-          <p className="mt-1 text-xs text-muted">
+          <p className="mt-1 text-xs text-zinc-400">
             {annualOperatingDays} operating days/yr (net fuel + thermal credit)
           </p>
         </div>
       </div>
 
-      {/* Energy Balance Bar */}
-      <div className="mt-4 rounded-lg border border-line/60 bg-paper/40 p-3">
+      {/* Energy Balance Bar with Liquid Shimmer Flow */}
+      <div className="mt-4 rounded-lg border border-white/[0.08] bg-white/[0.02] p-3">
         <div className="flex items-center justify-between text-xs">
-          <span className="font-mono text-muted">
+          <span className="font-mono text-zinc-300">
             Reactor Thermal Self-Sufficiency: {dailyEnergyGeneratedMj.toFixed(0)} MJ syngas vs {reactorThermalDutyMj.toFixed(0)} MJ duty
           </span>
-          <span className="font-mono font-semibold text-pine">
+          <span className="font-mono font-semibold text-emerald-400">
             +${formatNumber(dailyEnergyCredit, 2)}/day heating credit
           </span>
         </div>
-        <div className="mt-1.5 h-2 w-full overflow-hidden rounded-full bg-line/60">
+        <div className="mt-2 h-2.5 w-full overflow-hidden rounded-full bg-white/[0.08]">
           <div
-            className="h-full bg-gradient-to-r from-amber-500 to-emerald-500 transition-all duration-500"
+            className="liquid-bar-fill h-full rounded-full bg-gradient-to-r from-amber-500 via-emerald-400 to-teal-400 shadow-[0_0_10px_rgba(16,185,129,0.3)]"
             style={{ width: `${Math.min(100, selfHeatingOffsetPct)}%` }}
           />
         </div>
       </div>
 
       {/* Mandatory Provenance & Disclaimers */}
-      <footer className="mt-4 border-t border-line/60 pt-2 text-xs text-muted flex flex-wrap items-center justify-between gap-2">
+      <footer className="mt-4 border-t border-white/[0.08] pt-2 text-xs text-zinc-400 flex flex-wrap items-center justify-between gap-2">
         <p>
-          <em>* Model-Derived Commercial Estimate — Non-binding refinery projection</em>
+          <em className="text-zinc-400">* Model-Derived Commercial Estimate — Non-binding refinery projection</em>
         </p>
-        <p className="font-mono text-[11px]">
+        <p className="font-mono text-[11px] text-zinc-400">
           Basis: {feedstockKgPerDay / 1000} TPD feedstock · Density 0.85 kg/L · LHV 30 MJ/kg · Fuel benchmark ${crudePricePerLiter.toFixed(2)}/L · Solid Char: {formatNumber(dailyCharKg, 0)} kg/day
         </p>
       </footer>
-    </article>
+    </SpotlightCard>
   );
 }
